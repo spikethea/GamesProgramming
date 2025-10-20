@@ -1,4 +1,4 @@
-using Cinemachine;
+//using Cinemachine;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
@@ -15,7 +15,7 @@ public class Gun : MonoBehaviour
     public AudioSource Source;
     public AudioClip ShootingClip;
 
-    public CinemachineImpulseSource Impulse;
+    //public CinemachineImpulseSource Impulse;
 
     private void Update()
     {
@@ -29,7 +29,7 @@ public class Gun : MonoBehaviour
 
             Instantiate(BulletPrefab, FirePoint.position, FirePoint.rotation);
             Source.PlayOneShot(ShootingClip);
-            Impulse.GenerateImpulse();
+            //Impulse.GenerateImpulse();
         }
         
     }
