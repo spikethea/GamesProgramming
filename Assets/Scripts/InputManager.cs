@@ -5,6 +5,7 @@ public class InputManager : MonoBehaviour
 {
     public PlayerInput playerInput;
     public PlayerInput.OnFootActions onFoot;
+    private bool isAiming = false;
 
     private PlayerMotor motor;
     private PlayerLook look;
@@ -16,7 +17,7 @@ public class InputManager : MonoBehaviour
 
         motor = GetComponent<PlayerMotor>();
         look = GetComponent<PlayerLook>();
-        onFoot.Jump.performed += ctx => motor.Jump();  
+        onFoot.Jump.performed += ctx => motor.Jump();
     }
 
     // Update is called once per frame
@@ -28,7 +29,17 @@ public class InputManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        look.ProcessLook(onFoot.Look.ReadValue<Vector2>());
+
+        if(onFoot.Aim.IsPressed())
+        {
+            isAiming = true;
+        }
+        else
+        {
+            isAiming = false;
+        }
+
+        look.ProcessLook(onFoot.Look.ReadValue<Vector2>(), isAiming);
 ;
     }
 

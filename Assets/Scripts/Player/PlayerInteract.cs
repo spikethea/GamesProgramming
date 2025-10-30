@@ -12,7 +12,7 @@ public class PlayerInteract : MonoBehaviour
     private LayerMask mask;
     private PlayerUI playerUI;
     private InputManager inputManager;
-    public Scannable lastHit;
+    private Scannable lastHit;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,21 +58,24 @@ public class PlayerInteract : MonoBehaviour
                     {
                         scannable.BaseInteract();
                     }
-                } else 
-                {
-                    // Hide the text of the last Scannable object which the raycaster left and destroy textMesh
-                    if (lastHit != null)
-        
-                    {
-                        lastHit.HideFloatingText();
-                        lastHit = null;
-                    }
                 }
             }
 
         }
+        else
+        {
+            // Hide the text of the last Scannable object which the raycaster left and destroy textMesh
+            if (lastHit != null)
+
+            {
+                lastHit.HideFloatingText();
+                lastHit = null;
+            }
+        }
 
         
+
+
 
     }
 }

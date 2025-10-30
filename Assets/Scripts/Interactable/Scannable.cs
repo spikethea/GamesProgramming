@@ -1,23 +1,29 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class Scannable : Interactable
 {
     public GameObject FloatingTextPrefab;
+    private GameObject _floatingTextInstance;
     public string Caption = "Default";
     private Camera _cam;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        var go = Instantiate(FloatingTextPrefab, transform.position, Quaternion.identity);
-        go.GetComponent<TextMeshPro>().text = Caption;
+        Vector3 pos = new Vector3(0f, 5f, 0f);
+        _floatingTextInstance = Instantiate(FloatingTextPrefab, this.transform.position + pos, this.transform.rotation);
+        _floatingTextInstance.GetComponentInChildren<TextMeshPro>().text = Caption;
+        HideFloatingText();
+        _floatingTextInstance.transform.parent = transform;
         _cam = Camera.main;
 
     }
 
     private void Update()
     {
-      FloatingTextPrefab.transform.LookAt(_cam.transform.position);
+        var rot = Quaternion.LookRotation(_floatingTextInstance.transform.position - _cam.transform.position);
+        _floatingTextInstance.transform.rotation = rot;
 
     }
 
@@ -26,14 +32,14 @@ public class Scannable : Interactable
 
     public void ShowFloatingText ()
     {
-        FloatingTextPrefab.SetActive(true);
+        _floatingTextInstance.SetActive(true);
         Debug.Log("Show");
 
     }
 
     public void HideFloatingText()
     {
-        FloatingTextPrefab.SetActive(false);
+        _floatingTextInstance.SetActive(false);
         Debug.Log("Hide");
     }
 
