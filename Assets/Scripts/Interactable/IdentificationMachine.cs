@@ -1,17 +1,11 @@
 using UnityEngine;
 
-public class SpaceshipManager : MonoBehaviour
+public class IdentificationMachine : Scannable
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
-    }
-
-
-    public void EnterSpaceship()
-    {
-        Debug.Log("Entering Spaceship...");
     }
 
     // Update is called once per frame
