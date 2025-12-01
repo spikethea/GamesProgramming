@@ -12,7 +12,8 @@ public class PlayerInteract : MonoBehaviour
     private LayerMask mask;
     [SerializeField] private UIManager UI;
     private InputManager inputManager;
-    private Scannable lastHit;
+    private Interactable lastHit;
+    private Scannable lastHitScan;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,13 +31,16 @@ public class PlayerInteract : MonoBehaviour
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, distance, mask))
         {
+            Debug.Log(hitInfo.collider.name);
             if (hitInfo.distance < interactableDistance)
             {
+                
                 // At the shorter interactableDistance certain (Interactable) objects are applicable
                 if (hitInfo.collider.GetComponent<Interactable>() != null)
                 {
                     Interactable interactable = hitInfo.collider.GetComponent<Interactable>();
                     UI.mainUI.SetPrompt(hitInfo.collider.GetComponent<Interactable>().promptMessage);
+                    lastHit = interactable;
                     if (inputManager.onFoot.Interact.triggered)
                     {
                         interactable.BaseInteract();
@@ -51,7 +55,7 @@ public class PlayerInteract : MonoBehaviour
                 {
                     Scannable scannable = hitInfo.collider.GetComponent<Scannable>();
                     scannable.ShowFloatingText();
-                    lastHit = scannable;
+                    lastHitScan = scannable;
                     if (inputManager.onFoot.Interact.triggered)
                     {
                         scannable.BaseInteract();
@@ -62,13 +66,23 @@ public class PlayerInteract : MonoBehaviour
         }
         else
         {
-            // Hide the text of the last Scannable object which the raycaster left and destroy textMesh
+            
             if (lastHit != null)
-
             {
-                lastHit.HideFloatingText();
+                Debug.Log("Empty Prompt");
+                UI.mainUI.SetPrompt("");
+                UI.mainUI.SetMainText("");
                 lastHit = null;
             }
+
+            // Hide the text of the last Scannable object which the raycaster left and destroy textMesh
+            if (lastHitScan != null)
+            {
+                lastHitScan.HideFloatingText();
+                lastHitScan = null;
+            }
+
+
         }
 
         

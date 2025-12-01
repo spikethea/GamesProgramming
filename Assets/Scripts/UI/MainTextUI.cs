@@ -22,6 +22,12 @@ public class MainTextUI : MonoBehaviour
         PromptText.text = prompt;
     }
 
+    public void SetMainText(string prompt)
+    {
+        PromptText.text = prompt;
+    }
+
+
 
 
     public void SetTarget(string name, string crime, string location, int reward)

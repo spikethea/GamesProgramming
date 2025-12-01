@@ -9,11 +9,15 @@ public class InputManager : MonoBehaviour
 
     private PlayerMotor motor;
     private PlayerLook look;
+
+    public SpaceshipManager spaceshipManager;
+    public PlayerInput.FlyingActions Flying;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         playerInput = new PlayerInput();
         onFoot = playerInput.OnFoot;
+        Flying = playerInput.Flying;
 
         motor = GetComponent<PlayerMotor>();
         look = GetComponent<PlayerLook>();
@@ -23,9 +27,13 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
-
-        motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
-;    }
+        if (!spaceshipManager.inSpaceship)
+        {
+            motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
+        } else {
+            spaceshipManager.motor.ProcessMove(Flying.Movement.ReadValue<Vector2>());
+        }
+    }
 
     private void LateUpdate()
     {
