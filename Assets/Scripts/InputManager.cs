@@ -27,9 +27,12 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
+        
+
         if (!spaceshipManager.inSpaceship)
         {
             motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
+            motor.switchWeapons(onFoot.Scroll.ReadValue<Vector2>());
         } else {
             spaceshipManager.motor.ProcessMove(Flying.Movement.ReadValue<Vector2>());
         }

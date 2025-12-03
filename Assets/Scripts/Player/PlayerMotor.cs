@@ -10,6 +10,11 @@ public class PlayerMotor : MonoBehaviour
     private bool isGrounded;
     private bool isCrouched;
 
+    // Weapons
+    private bool ScannerIsEquipped = false;
+    public Gun gun;
+    public Scanner scanner;
+
     public float speed = 5f;
     public float gravity = -8.9f;
     public float jumpHeight = 1.5f;
@@ -56,6 +61,23 @@ public class PlayerMotor : MonoBehaviour
         {
             controller.height = 2;
             isCrouched = false;
+        }
+    }
+
+    public void switchWeapons(Vector2 input)
+    {
+        if (input.y < 0)
+            ScannerIsEquipped = !ScannerIsEquipped;
+
+        if (ScannerIsEquipped) {
+            gun.Hide();
+            scanner.Show();
+            UI.playerStat.isWeaponEquipped(false);
+        } else
+        {
+            gun.Show();
+            scanner.Hide();
+            UI.playerStat.isWeaponEquipped(true);
         }
     }
 }

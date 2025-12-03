@@ -12,7 +12,6 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         Restart();
-        //mainUI.SetTarget("carla", "Robbery", "nv-797", 300);
     }
 
 

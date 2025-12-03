@@ -30,10 +30,10 @@ public class MainTextUI : MonoBehaviour
 
 
 
-    public void SetTarget(string name, string crime, string location, int reward)
+    public void SetTarget(Target target)
     {
-        CentreText.text = $"Name: {name} \n Wanted For: {crime} \n Last Seen: {location} \n\n Reward: ${reward}";
-        BountyText.text = $"Target: {name}\nLocation: {location}";
+        CentreText.text = $"Name: {target.name} \n Wanted For: {target.crime} \n Last Seen: {target.location} \n\n Reward: ${target.reward}";
+        BountyText.text = $"Target: {target.name}\nLocation: {target.location}";
     }
 
     public void ClearText()

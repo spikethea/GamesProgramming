@@ -54,6 +54,7 @@ public class PlayerInteract : MonoBehaviour
                 if (hitInfo.collider.GetComponent<Scannable>() != null)
                 {
                     Scannable scannable = hitInfo.collider.GetComponent<Scannable>();
+                    Debug.Log(hitInfo.collider.name);
                     scannable.ShowFloatingText();
                     lastHitScan = scannable;
                     if (inputManager.onFoot.Interact.triggered)
