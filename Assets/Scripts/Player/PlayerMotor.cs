@@ -11,7 +11,7 @@ public class PlayerMotor : MonoBehaviour
     private bool isCrouched;
 
     // Weapons
-    private bool ScannerIsEquipped = false;
+    public bool ScannerIsEquipped = false;
     public Gun gun;
     public Scanner scanner;
 

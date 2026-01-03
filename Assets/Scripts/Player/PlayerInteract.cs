@@ -32,6 +32,7 @@ public class PlayerInteract : MonoBehaviour
         if (Physics.Raycast(ray, out hitInfo, distance, mask))
         {
             Debug.Log(hitInfo.collider.name);
+            //Ray Hitting Interactables
             if (hitInfo.distance < interactableDistance)
             {
                 
@@ -49,6 +50,7 @@ public class PlayerInteract : MonoBehaviour
 
             }
             else
+            // Ray Hitting Scannalbe objects
             {
                 // otherwise, only Scannable objects apply
                 if (hitInfo.collider.GetComponent<Scannable>() != null)
@@ -68,6 +70,15 @@ public class PlayerInteract : MonoBehaviour
                 }
             }
 
+            // Ray Hitting Non-Player Characters
+            if (hitInfo.collider.GetComponent<NPC>() != null) {
+                NPC npc = hitInfo.collider.GetComponent<NPC>();
+                PlayerMotor motor = GetComponent<PlayerMotor>();
+                if (inputManager.isAiming & !motor.ScannerIsEquipped) {
+                    Debug.Log("Aiming Gun at NPC");
+                    npc.isPlayerAimingatMe = true;
+                }
+            }
         }
         else
         {
@@ -84,12 +95,11 @@ public class PlayerInteract : MonoBehaviour
             if (lastHitScan != null)
             {
                 lastHitScan.HideFloatingText();
-                lastHitScan = null;
-
-                if(lastHitScan.GetComponent<IdentificationMachine>())
+                if (lastHitScan.GetComponent<IdentificationMachine>() != null)
                 {
                     UI.mainUI.ClearText();
                 }
+                lastHitScan = null;
             }
 
 

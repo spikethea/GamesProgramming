@@ -27,6 +27,9 @@ public class NPC : MonoBehaviour
 
     [SerializeField]
     private string currentState;
+
+    [Header("Dynamic Info")]
+    public bool isPlayerAimingatMe = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +46,12 @@ public class NPC : MonoBehaviour
         currentState = stateMachine.activeState.ToString();
         debugSphere.transform.position = lastKnownPos;
     }
+
+    public void AnimHandsDown()
+    { }
+
+    public void AnimHandsUp() { }
+    public void AnimHandsMove() { }
 
     public bool CanSeePlayer()
     {

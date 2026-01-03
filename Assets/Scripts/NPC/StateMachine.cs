@@ -1,11 +1,12 @@
 using UnityEngine;
 
-public abstract class StateMachine : MonoBehaviour
+public class StateMachine : MonoBehaviour
 {
     public BaseState activeState;
 
-    public void Initialise()
+    virtual public void Initialise()
     {
+
         ChangeState(new PatrolState());
     }
     // Start is called before the first frame update

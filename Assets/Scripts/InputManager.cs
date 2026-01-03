@@ -5,8 +5,8 @@ public class InputManager : MonoBehaviour
 {
     public PlayerInput playerInput;
     public PlayerInput.OnFootActions onFoot;
-       public PlayerInput.FlyingActions Flying;
-    private bool isAiming = false;
+    public PlayerInput.FlyingActions Flying;
+    public bool isAiming = false;
 
     private PlayerMotor motor;
     private PlayerLook look;
