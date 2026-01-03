@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    public MeshCollider mesh;
-    public MeshCollider blueMesh;
+    public MeshRenderer renderer;
+    public MeshRenderer blueRenderer;
 
     [Header("Bullets")]
     public Bullet BulletPrefab;
@@ -22,19 +22,19 @@ public class Gun : MonoBehaviour
 
     public void Hide() 
     {
-        mesh.enabled = false;
-        blueMesh.enabled = false;
+        renderer.enabled = false;
+        blueRenderer.enabled = false;
     }
 
     public void Show()
     {
-        mesh.enabled = true;
-        blueMesh.enabled = true;
+        renderer.enabled = true;
+        blueRenderer.enabled = true;
     }
 
     private void Update()
     {
-        if (!mesh.enabled)
+        if (!renderer.enabled)
             return;
         ReloadTimer -= Time.deltaTime;
         if (ReloadTimer > 0)

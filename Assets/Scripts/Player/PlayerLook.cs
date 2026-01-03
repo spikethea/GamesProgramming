@@ -6,12 +6,17 @@ using UnityEngine;
 public class PlayerLook : MonoBehaviour
 {
     public Camera cam;
+    public Transform Gun;
     public Transform cameraPivot;
     private float xRotation = 0f;
 
-
+    private float fieldOfView = 40f;
+    private float gunPositionX = 0.41f;
     public float xSensitivity = 30f;
     public float ySensitivity = 30f;
+
+    private float aimFieldOfView = 15f;
+    private float aimingGunPositionX = 0;
     public float xAimSensitivity = 10f;
     public float yAimSensitivity = 10f;
 
@@ -28,6 +33,20 @@ public class PlayerLook : MonoBehaviour
         //rotate player to look left and right
         transform.Rotate(Vector3.up * (mouseX * Time.deltaTime) * (isAiming ? xAimSensitivity : xSensitivity));
 
+        // Handle FOV changes
+        if (isAiming)
+        {
+            if (Gun.position.x == aimingGunPositionX) return;
+            Gun.localPosition = new Vector3(aimingGunPositionX, Gun.localPosition.y, Gun.localPosition.z);
+            cam.fieldOfView = aimFieldOfView;
+            
+        }
+        else
+        {
+            if (Gun.position.x == gunPositionX) return;
+            cam.fieldOfView = fieldOfView;
+            Gun.localPosition = new Vector3(gunPositionX, Gun.localPosition.y, Gun.localPosition.z);
+        }
     }
     // Start is called before the first frame update
     void Start()

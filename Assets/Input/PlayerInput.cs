@@ -141,7 +141,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""Scroll"",
                     ""type"": ""Value"",
                     ""id"": ""8bbee7c7-70b6-4b83-9e91-d47b787890b4"",
-                    ""expectedControlType"": ""Axis"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -360,18 +360,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""fb7ad26d-1dc7-49ce-8d6a-f49e7dd017fb"",
-                    ""path"": ""<Mouse>/scroll/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Scroll"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7ea34d7a-4af3-479f-92a1-9ad23c1472c9"",
-                    ""path"": ""<Mouse>/scroll/up"",
+                    ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

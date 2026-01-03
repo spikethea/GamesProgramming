@@ -11,7 +11,7 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField]
     private LayerMask mask;
     [SerializeField] private UIManager UI;
-    private InputManager inputManager;
+    public InputManager inputManager;
     private Interactable lastHit;
     private Scannable lastHitScan;
     // Start is called before the first frame update
@@ -61,6 +61,10 @@ public class PlayerInteract : MonoBehaviour
                     {
                         scannable.BaseInteract();
                     }
+
+                    if (scannable.GetComponent<IdentificationMachine>()) {
+                        scannable.GetComponent<IdentificationMachine>().Identify();
+                    }
                 }
             }
 
@@ -81,6 +85,11 @@ public class PlayerInteract : MonoBehaviour
             {
                 lastHitScan.HideFloatingText();
                 lastHitScan = null;
+
+                if(lastHitScan.GetComponent<IdentificationMachine>())
+                {
+                    UI.mainUI.ClearText();
+                }
             }
 
 

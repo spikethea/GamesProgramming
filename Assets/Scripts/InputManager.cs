@@ -5,13 +5,14 @@ public class InputManager : MonoBehaviour
 {
     public PlayerInput playerInput;
     public PlayerInput.OnFootActions onFoot;
+       public PlayerInput.FlyingActions Flying;
     private bool isAiming = false;
 
     private PlayerMotor motor;
     private PlayerLook look;
 
     public SpaceshipManager spaceshipManager;
-    public PlayerInput.FlyingActions Flying;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -29,7 +30,7 @@ public class InputManager : MonoBehaviour
     {
         
 
-        if (!spaceshipManager.inSpaceship)
+        if (playerInput.OnFoot.enabled)
         {
             motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
             motor.switchWeapons(onFoot.Scroll.ReadValue<Vector2>());
@@ -41,17 +42,24 @@ public class InputManager : MonoBehaviour
     private void LateUpdate()
     {
 
-        if(onFoot.Aim.IsPressed())
-        {
-            isAiming = true;
-        }
-        else
-        {
-            isAiming = false;
-        }
+        
 
-        look.ProcessLook(onFoot.Look.ReadValue<Vector2>(), isAiming);
-;
+        if (playerInput.OnFoot.enabled)
+        {
+            look.ProcessLook(onFoot.Look.ReadValue<Vector2>(), isAiming);
+
+            if (onFoot.Aim.IsPressed())
+            {
+                isAiming = true;
+            }
+            else
+            {
+                isAiming = false;
+            }
+        }
+        else {
+            // Spaceship Input
+        }
     }
 
     private void OnEnable()

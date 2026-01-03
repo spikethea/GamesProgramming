@@ -11,7 +11,7 @@ public class SpaceshipMotor : MonoBehaviour
     private bool isEngineOn = true;
     private bool isBoosting;
 
-    public float speed = 5f;
+    public float speed = 50f;
     public float boostSpeed = 5f;
     public float shipHeight = 1.5f;
 
@@ -24,15 +24,32 @@ public class SpaceshipMotor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
     }
+
     public void ProcessMove(Vector2 input)
     {
+        
         Vector3 moveDirection = Vector3.zero;
-        moveDirection.x = input.x;
         moveDirection.z = input.y;
+
+
+
         if (!isGrounded && isEngineOn) {
-            //rb.MovePosition(rb.position + moveDirection * speed * Time.fixedDeltaTime);
-            rb.AddForce(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
+            transform.Translate(moveDirection * speed * Time.fixedDeltaTime, transform);
+            //Debug.Log($"Force: {moveDirection * speed} | Vel: {rb.linearVelocity}");
+            //Vector3 force = moveDirection * speed;
+            //rb.AddForce(force, ForceMode.Force);
+
+            if (input.x == 1) {
+            transform.Rotate(Vector3.up * Time.fixedDeltaTime * 50f);
+            } else if (input.x == -1) {
+                transform.Rotate(Vector3.up * Time.fixedDeltaTime * -50f);
+            }
+        }
+
+        if (isBoosting && isEngineOn) {
+            rb.MovePosition(rb.position + moveDirection * boostSpeed * Time.fixedDeltaTime);
         }
         //controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
         //controller.Move(playerVelocity * Time.deltaTime);

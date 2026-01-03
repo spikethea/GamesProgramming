@@ -27,6 +27,7 @@ public class IdentificationMachine: MonoBehaviour {
 
     public void Identify() {
         Game.currentTarget = target;
+        UI.mainUI.SetTarget(target);
     }
     // Update is called once per frame
     void Update()
