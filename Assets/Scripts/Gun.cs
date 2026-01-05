@@ -1,4 +1,5 @@
 //using Cinemachine;
+
 using UnityEngine;
 
 public class Gun : MonoBehaviour
@@ -45,9 +46,11 @@ public class Gun : MonoBehaviour
         {
             ReloadTimer = ReloadTime;
 
-            Instantiate(BulletPrefab, FirePoint.position, FirePoint.rotation);
+            Bullet bullet = Instantiate(BulletPrefab, FirePoint.position, FirePoint.rotation);
             Source.PlayOneShot(ShootingClip);
-            //Impulse.GenerateImpulse();
+            // add force rigidbody of the bullet.
+            bullet.GetComponent<Rigidbody>().linearVelocity = FirePoint.forward * 40f;
+            ReloadTimer = 0;
         }
         
     }

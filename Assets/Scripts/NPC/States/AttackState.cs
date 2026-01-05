@@ -57,14 +57,14 @@ public class AttackState : BaseState
 
     public void Shoot()
     {
+        if (shotTimer < 3)
+            return;
         //store reference to the gun barrel.
         Transform gunbarrel = npc.gunBarrel;
         // instantiate a new bullet.
         GameObject bullet = GameObject.Instantiate(Resources.Load("Prefabs/Bullet") as GameObject, gunbarrel.position, npc.transform.rotation);
-        // calculate the direction to the player.
-        Vector3 shootDirection = (npc.Player.transform.position - gunbarrel.transform.position).normalized;
         // add force rigidbody of the bullet.
-        bullet.GetComponent<Rigidbody>().linearVelocity = Quaternion.AngleAxis(UnityEngine.Random.Range(-3, 3f), Vector3.up) * shootDirection * 40;
+        bullet.GetComponent<Rigidbody>().linearVelocity = gunbarrel.forward * 40f;
         shotTimer = 0;
     }
 

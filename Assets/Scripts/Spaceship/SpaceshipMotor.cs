@@ -31,7 +31,7 @@ public class SpaceshipMotor : MonoBehaviour
     {
         
         Vector3 moveDirection = Vector3.zero;
-        moveDirection.z = input.y;
+        moveDirection.x = input.y;
 
 
 

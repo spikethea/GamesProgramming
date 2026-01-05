@@ -3463,6 +3463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0330c00989b07b41b55f322c304641f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC
+  agent: {fileID: 0}
   path: {fileID: 448560136}
   debugSphere: {fileID: 237799034}
   sightDistance: 20
@@ -3525,11 +3526,11 @@ Animation:
   m_GameObject: {fileID: 1177567954}
   m_Enabled: 1
   serializedVersion: 4
-  m_Animation: {fileID: 0}
+  m_Animation: {fileID: 7400000, guid: 175310e805e9f874d9b22aa5c9421a05, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: 175310e805e9f874d9b22aa5c9421a05, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 1
+  m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_UpdateMode: 0
   m_CullingType: 0
@@ -5942,6 +5943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0330c00989b07b41b55f322c304641f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC
+  agent: {fileID: 0}
   path: {fileID: 448560136}
   debugSphere: {fileID: 237799034}
   sightDistance: 20

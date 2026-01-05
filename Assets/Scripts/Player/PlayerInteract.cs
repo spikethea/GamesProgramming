@@ -69,7 +69,7 @@ public class PlayerInteract : MonoBehaviour
                     }
                 }
             }
-
+            Debug.Log(hitInfo.collider);
             // Ray Hitting Non-Player Characters
             if (hitInfo.collider.GetComponent<NPC>() != null) {
                 NPC npc = hitInfo.collider.GetComponent<NPC>();

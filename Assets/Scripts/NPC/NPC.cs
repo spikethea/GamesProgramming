@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class NPC : MonoBehaviour
 {
     private StateMachine stateMachine;
-    private NavMeshAgent agent;
+    public NavMeshAgent agent;
     private GameObject player;
     private Vector3 lastKnownPos;
     public NavMeshAgent Agent { get => agent; }
@@ -18,7 +18,7 @@ public class NPC : MonoBehaviour
     [Header("Sight Values")]
     public float sightDistance = 20f;
     public float fieldOfView = 85;
-    public float eyeHeight = 1f;
+    public float eyeHeight = 2f;
     [Header("Weapon Values")]
     public Transform meleeWeapon;
     public Transform gunBarrel;
@@ -48,9 +48,15 @@ public class NPC : MonoBehaviour
     }
 
     public void AnimHandsDown()
-    { }
+    {
+        Debug.Log("AnimHandsDown EVENT FIRED");
+        Debug.Log(this);
+    }
 
-    public void AnimHandsUp() { }
+    public void AnimHandsUp() {
+        Debug.Log("AnimHandsUp EVENT FIRED");
+        Debug.Log(this);
+    }
     public void AnimHandsMove() { }
 
     public bool CanSeePlayer()
@@ -62,18 +68,20 @@ public class NPC : MonoBehaviour
             {
                 Vector3 targetDirection = player.transform.position - transform.position - (Vector3.up * eyeHeight);
                 float angleToPlayer = Vector3.Angle(targetDirection, transform.forward);
-                if(angleToPlayer >= -fieldOfView && angleToPlayer <= fieldOfView)
+                if (angleToPlayer <= fieldOfView * 0.5f)
                 {
                     Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
                     RaycastHit hitInfo = new RaycastHit();
-                    if(Physics.Raycast(ray, out hitInfo, sightDistance))
+                    Debug.DrawRay(ray.origin, ray.direction * sightDistance);
+                    if (Physics.Raycast(ray, out hitInfo, sightDistance))
                     {
-                        if (hitInfo.transform.gameObject == player)
+                        if (hitInfo.transform.tag == "Player")
                         {
                             Debug.DrawRay(ray.origin, ray.direction * sightDistance);
-                            return true;
+                            
                         }
                     }
+                    return true;
                 }
             }
         }

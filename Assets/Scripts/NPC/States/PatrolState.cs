@@ -17,9 +17,9 @@ public class PatrolState : BaseState
     public override void Perform()
     {
         PatrolCycle();
-        if (npc.CanSeePlayer())
+        if (npc.CanSeePlayer() && npc.isPlayerAimingatMe)
         {
-            stateMachine.ChangeState(new AttackState());
+            stateMachine.ChangeState(new PanicState());
         }
     }
 

@@ -29,6 +29,11 @@ public class PlayerMotor : MonoBehaviour
     void Update()
     {
         isGrounded = controller.isGrounded;
+
+        if (transform.position.y < - 30)
+        {
+            transform.position = new Vector3(0, 5, 0);
+        }
     }
     public void ProcessMove(Vector2 input)
     {
