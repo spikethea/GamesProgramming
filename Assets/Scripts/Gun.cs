@@ -1,5 +1,6 @@
 //using Cinemachine;
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
@@ -18,6 +19,8 @@ public class Gun : MonoBehaviour
     [Header("Audio")]
     public AudioSource Source;
     public AudioClip ShootingClip;
+
+    public List<Bullet> bullets = new List<Bullet>();
 
     //public CinemachineImpulseSource Impulse;
 
@@ -41,8 +44,18 @@ public class Gun : MonoBehaviour
         if (ReloadTimer > 0)
             return;
 
+        if (bullets.Count <= 3)
+        {
+            SpawnBulletPrefab();
+        }
 
-        if (Input.GetMouseButtonDown(0))
+
+        
+        
+    }
+
+    private void SpawnBulletPrefab() {
+    if (Input.GetMouseButtonDown(0))
         {
             ReloadTimer = ReloadTime;
 
@@ -51,7 +64,7 @@ public class Gun : MonoBehaviour
             // add force rigidbody of the bullet.
             bullet.GetComponent<Rigidbody>().linearVelocity = FirePoint.forward * 40f;
             ReloadTimer = 0;
+            bullets.Add(bullet);
         }
-        
     }
 }

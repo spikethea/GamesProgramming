@@ -10,6 +10,9 @@ public class PlayerMotor : MonoBehaviour
     private bool isGrounded;
     private bool isCrouched;
 
+    // Player Stats
+    public int currentHealth = 3;
+
     // Weapons
     public bool ScannerIsEquipped = false;
     public Gun gun;
@@ -34,6 +37,14 @@ public class PlayerMotor : MonoBehaviour
         {
             transform.position = new Vector3(0, 5, 0);
         }
+    }
+
+
+    public void takeDamage(int damagePoints)
+    {
+        currentHealth -= damagePoints;
+        UI.playerStat.UpdateHealth(currentHealth);
+        UI.graphicsUI.StartFade();
     }
     public void ProcessMove(Vector2 input)
     {

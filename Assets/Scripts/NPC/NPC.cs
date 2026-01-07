@@ -11,6 +11,10 @@ public class NPC : MonoBehaviour
     private Vector3 lastKnownPos;
     public NavMeshAgent Agent { get => agent; }
     public GameObject Player { get => player; }
+
+    [Header("How")]
+    public int health = 10;
+
     public Vector3 LastKnownPos { get => lastKnownPos; set => lastKnownPos = value; }
     // just for debugging purposes
     public CharacterPath path;
@@ -45,6 +49,10 @@ public class NPC : MonoBehaviour
         CanSeePlayer();
         currentState = stateMachine.activeState.ToString();
         debugSphere.transform.position = lastKnownPos;
+    }
+
+    public void takeDamage(int damagePoints) {
+        health -= damagePoints;
     }
 
     public void AnimHandsDown()

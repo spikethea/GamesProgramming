@@ -5,6 +5,7 @@ public class UIManager : MonoBehaviour
 {
     public MainTextUI mainUI;
     public PlayerStatUI playerStat;
+    public GraphicsUI graphicsUI;
 
 
     

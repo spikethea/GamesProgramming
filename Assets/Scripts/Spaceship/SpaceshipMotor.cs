@@ -15,17 +15,31 @@ public class SpaceshipMotor : MonoBehaviour
     public float boostSpeed = 5f;
     public float shipHeight = 1.5f;
 
+    // Vertical Oscillation
+    public float Yspeed = 5f;
+    public GameObject childMesh;
+    public float amplitudeY = 0.1f;
+    private Vector3 startMeshPos;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        startMeshPos = childMesh.transform.localPosition;
+    }
+
+    void ApplyVerticalOscillation()
+    {
+        float yOffset = Mathf.Sin(Time.time * Yspeed) * amplitudeY;
+        childMesh.transform.localPosition = startMeshPos + new Vector3(0, yOffset, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        ApplyVerticalOscillation();
     }
+
+
 
     public void ProcessMove(Vector2 input)
     {
