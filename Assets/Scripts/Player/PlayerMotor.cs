@@ -26,7 +26,6 @@ public class PlayerMotor : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        UI.graphicsUI.StartFade();
     }
 
     // Update is called once per frame
@@ -36,7 +35,9 @@ public class PlayerMotor : MonoBehaviour
 
         if (transform.position.y < - 30)
         {
+            controller.enabled = false;
             transform.position = new Vector3(0, 5, 0);
+            controller.enabled = true;
         }
     }
 

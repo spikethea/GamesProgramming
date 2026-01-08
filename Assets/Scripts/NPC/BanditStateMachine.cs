@@ -1,9 +1,7 @@
 using UnityEngine;
 
-public class GuardStateMachine : StateMachine
+public class BanditStateMachine : StateMachine
 {
-    public AudioClip botheredClip;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -12,7 +10,7 @@ public class GuardStateMachine : StateMachine
 
     public override void Initialise()
     {
-        ChangeState(new GuardDefaultState(botheredClip));
+        ChangeState(new BanditPatrolState());
     }
 
     public void AimPose()

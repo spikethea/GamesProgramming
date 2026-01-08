@@ -10,14 +10,19 @@ public class PatrolState : BaseState
 
     public override void Enter()
     {
+        // if no charaqcter path found, redirect to character path
         
     }
 
     // Update is called once per frame
     public override void Perform()
     {
-        PatrolCycle();
-        if (npc.CanSeePlayer() && npc.isPlayerAimingatMe)
+        if (npc.path != null)
+        {
+            PatrolCycle();
+        }
+        
+        if (npc.isPlayerAimingatMe)
         {
             stateMachine.ChangeState(new PanicState());
         }

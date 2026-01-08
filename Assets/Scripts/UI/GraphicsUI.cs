@@ -21,7 +21,7 @@ public class GraphicsUI : MonoBehaviour
 
         scannerColor = scannerFilter.material.color;
 
-        damageFilter.color = new Color(1, 1, 1, 0.5f);
+        damageFilter.color = new Color(1, 1, 1, 0f);
         scannerFilter.color = new Color(1, 1, 1, 0);
     }
 

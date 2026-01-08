@@ -13,7 +13,9 @@ public class SpaceshipManager : MonoBehaviour
     private InputManager PlayerInput;
     public PlayerInput.FlyingActions Flying;
     public PlayerInput.OnFootActions onFoot;
+
     public Transform sittingPoint;
+    public Transform exitPoint;
 
     public bool inSpaceship = false;
 
@@ -41,6 +43,11 @@ public class SpaceshipManager : MonoBehaviour
 
             motor.ResetYPosition();
             MoveSpaceship();
+
+            //Exiting Spaceship
+            if (Flying.Exit.IsPressed()) {
+                ExitSpaceship();
+            }
         }
         else {
             motor.ApplyVerticalOscillation();
@@ -55,8 +62,9 @@ public class SpaceshipManager : MonoBehaviour
 
         //Debug.Log("sittingPoint.rotation.y: " + sittingPoint.rotation.y);
 
+        
+        Player.transform.parent = transform; 
         Player.transform.rotation = sittingPoint.rotation;
-        Player.transform.parent = transform;
 
         
 
@@ -66,8 +74,21 @@ public class SpaceshipManager : MonoBehaviour
         playerLook.enabled = false;
         playerMotor.enabled = false;
         
-        Camera.main.transform.eulerAngles = new Vector3(0,0,0);
+        //Camera.main.transform.eulerAngles = new Vector3(0,0,0);
 
+    }
+
+    public void ExitSpaceship()
+    {
+        inSpaceship = false;
+
+        PlayerInput.onFoot.Enable();
+        PlayerInput.Flying.Disable();
+        Debug.Log("Exiting Spaceship...");
+        playerLook.enabled = true;
+        playerMotor.enabled = true;
+
+        playerMotor.transform.position = exitPoint.position;
     }
 
     private void MoveSpaceship()

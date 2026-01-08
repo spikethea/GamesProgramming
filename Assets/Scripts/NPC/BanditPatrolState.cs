@@ -1,4 +1,4 @@
-﻿public class GuardPatrolState : PatrolState
+﻿public class BanditPatrolState : PatrolState
 {
     public override void Perform()
     {

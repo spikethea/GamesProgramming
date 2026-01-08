@@ -12,21 +12,23 @@ public class Bullet : MonoBehaviour
         Rigidbody.linearVelocity = transform.forward * Speed;
     }
 
-    private void OnCollisionEnter(Collision other)
+    void OnTriggerEnter(Collider other)
     {
-        if (other.collider != null) {
-            NPC nPC = other.collider.GetComponent<NPC>();
+        if (other != null) {
+            NPC nPC = other.GetComponent<NPC>();
             if (nPC != null)
             {
                 nPC.takeDamage(2);
+                Destroy(gameObject);
             }
 
-            PlayerMotor player = other.collider.GetComponent<PlayerMotor>();
+            PlayerMotor player = other.GetComponent<PlayerMotor>();
             if (player != null)
             {
                 player.takeDamage(1);
+                Destroy(gameObject);
             }
-            Destroy(gameObject);
+            
         }
     }
 }

@@ -19,6 +19,7 @@ public class NPC : MonoBehaviour
     // just for debugging purposes
     public CharacterPath path;
     public GameObject debugSphere;
+
     [Header("Sight Values")]
     public float sightDistance = 20f;
     public float fieldOfView = 85;
@@ -31,6 +32,9 @@ public class NPC : MonoBehaviour
 
     [Header("Animation")]
     public Animator animator;
+
+    [Header("Animation")]
+    public AudioSource audioSource;
 
     [SerializeField]
     private string currentState;
@@ -62,19 +66,20 @@ public class NPC : MonoBehaviour
 
     public void AnimPanic()
     {
-        animator.Play("Civilian", 0, 0.5f);
-        animator.speed = 1f;
+        animator.Play("Panic", 0, 0f);
         Debug.Log("AnimPanic EVENT FIRED");
         Debug.Log(this);
     }
 
     public void PoseHandsDown()
     {
-        Debug.Log("AnimHandsDown EVENT FIRED");
+        Debug.Log("PoseHandsDown EVENT FIRED");
         Debug.Log(this);
     }
 
     public void AnimHandsUp() {
+        //var state = animator.GetCurrentAnimatorStateInfo(0);
+        //animator.Play("Civilian");
         Debug.Log("AnimHandsUp EVENT FIRED");
         Debug.Log(this);
     }

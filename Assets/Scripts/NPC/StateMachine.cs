@@ -6,7 +6,7 @@ public class StateMachine : MonoBehaviour
 
     virtual public void Initialise()
     {
-
+        //auto corrects to StaticSate is no path is given
         ChangeState(new PatrolState());
     }
     // Start is called before the first frame update
