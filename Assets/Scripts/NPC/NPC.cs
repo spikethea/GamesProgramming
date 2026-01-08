@@ -29,11 +29,15 @@ public class NPC : MonoBehaviour
     [Range(0.1f, 10f)]
     public float fireRate;
 
+    [Header("Animation")]
+    public Animator animator;
+
     [SerializeField]
     private string currentState;
 
     [Header("Dynamic Info")]
     public bool isPlayerAimingatMe = false;
+    public bool isPlayerShootingatMe = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -53,9 +57,18 @@ public class NPC : MonoBehaviour
 
     public void takeDamage(int damagePoints) {
         health -= damagePoints;
+        isPlayerShootingatMe = true;
     }
 
-    public void AnimHandsDown()
+    public void AnimPanic()
+    {
+        animator.Play("Civilian", 0, 0.5f);
+        animator.speed = 1f;
+        Debug.Log("AnimPanic EVENT FIRED");
+        Debug.Log(this);
+    }
+
+    public void PoseHandsDown()
     {
         Debug.Log("AnimHandsDown EVENT FIRED");
         Debug.Log(this);
@@ -65,7 +78,23 @@ public class NPC : MonoBehaviour
         Debug.Log("AnimHandsUp EVENT FIRED");
         Debug.Log(this);
     }
-    public void AnimHandsMove() { }
+
+    public void AnimHandsMoveToShoot()
+    {
+        Debug.Log("AnimHandsMoveToShoot EVENT FIRED");
+        Debug.Log(this);
+    }
+
+    public void PoseShooting()
+    {
+        var state = animator.GetCurrentAnimatorStateInfo(0);
+        animator.Play(state.fullPathHash, 0, 0.99f);
+        animator.Update(0f);                       // force evaluation
+        animator.speed = 0f;
+        Debug.Log("PoseShooting EVENT FIRED");
+        Debug.Log(this);
+    }
+
 
     public bool CanSeePlayer()
     {

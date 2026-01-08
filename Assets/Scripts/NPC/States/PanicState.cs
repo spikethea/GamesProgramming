@@ -49,7 +49,7 @@ public class PanicState : BaseState
         {
             npc.StopCoroutine(freezeRoutine);
             freezeRoutine = null;
-            npc.AnimHandsDown();
+            npc.PoseHandsDown();
         }
 
         //Re-enable Navmesh rotation control

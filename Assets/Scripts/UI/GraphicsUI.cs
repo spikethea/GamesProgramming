@@ -1,22 +1,28 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.UI;
 
 public class GraphicsUI : MonoBehaviour
 {
-    public RawImage damageFilter;
+    public Image damageFilter;
+    public Image scannerFilter;
 
     private Coroutine fadeCoroutine = null;
     public float fadeSpeed = 0.5f;
-    private Material mat;
+    private Color damageColor;
     private Color color;
+    private Color scannerColor;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        mat = damageFilter.material;
+        damageColor = damageFilter.color;
         color = damageFilter.color;
 
-        damageFilter.material.color = new Color(1, 1, 1, 0);
+        scannerColor = scannerFilter.material.color;
+
+        damageFilter.color = new Color(1, 1, 1, 0.5f);
+        scannerFilter.color = new Color(1, 1, 1, 0);
     }
 
     public void StartFade() {
@@ -25,18 +31,31 @@ public class GraphicsUI : MonoBehaviour
 
     IEnumerator Fade(float startAlpha)
     {
-        color = mat.color;
-        color.a = startAlpha;
-        mat.color = color;
+        damageColor = damageFilter.color;
+        damageColor.a = startAlpha;
+        damageFilter.color = damageColor;
+        damageFilter.color = damageColor;
 
-        while (color.a > 0)
+        while (damageColor.a > 0)
         {
-            color.a -= fadeSpeed * Time.deltaTime;
-            mat.color = color;
+            damageColor.a -= fadeSpeed * Time.deltaTime;
+            damageFilter.color = damageColor;
             yield return null;
         }
 
         yield return 0;
+    }
+
+    public void ShowScanner()
+    {
+        scannerFilter.enabled = true;
+        //scannerColor = new Color(1, 1, 1, 1);
+    }
+
+    public void HideScanner()
+    {
+        scannerFilter.enabled = false;
+        //scannerColor = new Color(1, 1, 1, 0);
     }
 
     // Update is called once per frame

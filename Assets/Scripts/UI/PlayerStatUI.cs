@@ -41,7 +41,7 @@ public class PlayerStatUI : MonoBehaviour
         if (weaponEquipped) {
             WeaponSwapUI.text = "Gun <\n <color=#808080>Scanner [Q]</color>";
         } else {
-            WeaponSwapUI.text = "Scanner<\n <color=#808080>Gun [Q] </color>";
+            WeaponSwapUI.text = "Scanner <\n <color=#808080>Gun [Q] </color>";
         }
     }
 

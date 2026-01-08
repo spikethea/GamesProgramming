@@ -11,8 +11,8 @@ public class SpaceshipMotor : MonoBehaviour
     private bool isEngineOn = true;
     private bool isBoosting;
 
-    public float speed = 50f;
-    public float boostSpeed = 5f;
+    public float speed = 20f;
+    public float boostSpeed = 25f;
     public float shipHeight = 1.5f;
 
     // Vertical Oscillation
@@ -27,7 +27,12 @@ public class SpaceshipMotor : MonoBehaviour
         startMeshPos = childMesh.transform.localPosition;
     }
 
-    void ApplyVerticalOscillation()
+    public void ResetYPosition()
+    {
+        childMesh.transform.localPosition = startMeshPos;
+    }
+
+    public void ApplyVerticalOscillation()
     {
         float yOffset = Mathf.Sin(Time.time * Yspeed) * amplitudeY;
         childMesh.transform.localPosition = startMeshPos + new Vector3(0, yOffset, 0);
@@ -36,10 +41,8 @@ public class SpaceshipMotor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ApplyVerticalOscillation();
+        
     }
-
-
 
     public void ProcessMove(Vector2 input)
     {
@@ -50,12 +53,19 @@ public class SpaceshipMotor : MonoBehaviour
 
 
         if (!isGrounded && isEngineOn) {
-            transform.Translate(moveDirection * speed * Time.fixedDeltaTime, transform);
-            //Debug.Log($"Force: {moveDirection * speed} | Vel: {rb.linearVelocity}");
-            //Vector3 force = moveDirection * speed;
-            //rb.AddForce(force, ForceMode.Force);
+            if (isBoosting)
+            {
+                transform.Translate(moveDirection * boostSpeed * Time.fixedDeltaTime, transform);
+            }
+            else
+            {
+                transform.Translate(moveDirection * speed * Time.fixedDeltaTime, transform);
+            }
+                //Debug.Log($"Force: {moveDirection * speed} | Vel: {rb.linearVelocity}");
+                //Vector3 force = moveDirection * speed;
+                //rb.AddForce(force, ForceMode.Force);
 
-            if (input.x == 1) {
+                if (input.x == 1) {
             transform.Rotate(Vector3.up * Time.fixedDeltaTime * 50f);
             } else if (input.x == -1) {
                 transform.Rotate(Vector3.up * Time.fixedDeltaTime * -50f);

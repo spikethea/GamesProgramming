@@ -26,6 +26,7 @@ public class PlayerMotor : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        UI.graphicsUI.StartFade();
     }
 
     // Update is called once per frame
@@ -39,6 +40,19 @@ public class PlayerMotor : MonoBehaviour
         }
     }
 
+    public void ProcessAim(bool isAiming)
+    {
+        if (!ScannerIsEquipped) return;
+        if (isAiming && !UI.graphicsUI.scannerFilter.enabled)
+        {
+            UI.graphicsUI.ShowScanner();
+        }
+        else if (isAiming && UI.graphicsUI.scannerFilter.enabled)
+        {
+            UI.graphicsUI.HideScanner();
+        }
+    }
+
 
     public void takeDamage(int damagePoints)
     {
@@ -48,6 +62,7 @@ public class PlayerMotor : MonoBehaviour
     }
     public void ProcessMove(Vector2 input)
     {
+        
         Vector3 moveDirection = Vector3.zero;
         moveDirection.x = input.x;
         moveDirection.z = input.y;
@@ -80,17 +95,36 @@ public class PlayerMotor : MonoBehaviour
         }
     }
 
-    public void switchWeapons(Vector2 input)
-    {
-        if (input.y < 0)
-            ScannerIsEquipped = !ScannerIsEquipped;
+    public void switchWeaponsHotkey() {
+        ScannerIsEquipped = !ScannerIsEquipped;
 
         if (ScannerIsEquipped) {
+            ScannerIsEquipped = false;
+            gun.Show();
+            scanner.Hide();
+            UI.playerStat.isWeaponEquipped(true);
+        } else
+        {
+            ScannerIsEquipped = true;
             gun.Hide();
             scanner.Show();
             UI.playerStat.isWeaponEquipped(false);
-        } else
+        }
+    }
+
+    public void switchWeapons(Vector2 input)
+    {
+        Debug.Log(input.y);
+        if (input.y < 0)
         {
+            ScannerIsEquipped = true;
+            gun.Hide();
+            scanner.Show();
+            UI.playerStat.isWeaponEquipped(false);
+        }
+        else if (input.y > 0)
+        {
+            ScannerIsEquipped = false;
             gun.Show();
             scanner.Hide();
             UI.playerStat.isWeaponEquipped(true);

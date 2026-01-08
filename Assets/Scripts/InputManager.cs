@@ -22,7 +22,21 @@ public class InputManager : MonoBehaviour
 
         motor = GetComponent<PlayerMotor>();
         look = GetComponent<PlayerLook>();
+
         onFoot.Jump.performed += ctx => motor.Jump();
+        onFoot.HotSwap.performed += ctx => motor.switchWeaponsHotkey();
+    }
+
+    void Update()
+    {
+        if (onFoot.Aim.IsPressed())
+        {
+            isAiming = true;
+        }
+        else
+        {
+            isAiming = false;
+        }
     }
 
     // Update is called once per frame
@@ -47,15 +61,7 @@ public class InputManager : MonoBehaviour
         if (playerInput.OnFoot.enabled)
         {
             look.ProcessLook(onFoot.Look.ReadValue<Vector2>(), isAiming);
-
-            if (onFoot.Aim.IsPressed())
-            {
-                isAiming = true;
-            }
-            else
-            {
-                isAiming = false;
-            }
+            motor.ProcessAim(isAiming);
         }
         else {
             // Spaceship Input

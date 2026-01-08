@@ -7,5 +7,9 @@
         {
             stateMachine.ChangeState(new AttackState());
         }
+
+        if (npc.isPlayerShootingatMe) {
+            stateMachine.ChangeState(new AttackState());
+        }
     }
 }

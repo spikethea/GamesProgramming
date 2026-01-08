@@ -38,9 +38,12 @@ public class SpaceshipManager : MonoBehaviour
     {
         if (inSpaceship)
         {
-            
 
+            motor.ResetYPosition();
             MoveSpaceship();
+        }
+        else {
+            motor.ApplyVerticalOscillation();
         }
     }
 
@@ -55,11 +58,15 @@ public class SpaceshipManager : MonoBehaviour
         Player.transform.rotation = sittingPoint.rotation;
         Player.transform.parent = transform;
 
+        
+
         PlayerInput.onFoot.Disable();
         PlayerInput.Flying.Enable();
         Debug.Log("Entering Spaceship...");
         playerLook.enabled = false;
         playerMotor.enabled = false;
+        
+        Camera.main.transform.eulerAngles = new Vector3(0,0,0);
 
     }
 

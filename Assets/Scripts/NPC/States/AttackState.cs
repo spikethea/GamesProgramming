@@ -18,6 +18,13 @@ public class AttackState : BaseState
     // Update is called once per frame
     public override void Perform()
     {
+        if (npc.isPlayerAimingatMe || npc.isPlayerShootingatMe)
+        {
+            npc.AnimHandsMoveToShoot();
+            npc.isPlayerAimingatMe = false;
+            npc.isPlayerShootingatMe = false;
+        }
+        
         if (npc.CanSeePlayer())
         {
             // lock the lose player timer and increment the move
@@ -46,9 +53,11 @@ public class AttackState : BaseState
         else 
         {
             losePlayerTimer += Time.deltaTime;
-            losePlayerTimer += Time.deltaTime;
+
             if (losePlayerTimer > waitBeforeSearchTime)
             {
+                npc.isPlayerShootingatMe = false;
+                npc.isPlayerAimingatMe = false;
                 //Change to the search state.
                 stateMachine.ChangeState(new SearchState());
             }
