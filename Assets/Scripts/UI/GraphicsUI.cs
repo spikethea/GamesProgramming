@@ -25,6 +25,16 @@ public class GraphicsUI : MonoBehaviour
         scannerFilter.color = new Color(1, 1, 1, 0f);
     }
 
+    public void CriticalHealth() {
+        damageFilter.color = new Color(1, 1, 1, 0.6f);
+    }
+
+    public void ResetGraphicsUI()
+    {
+        damageFilter.color = new Color(1, 1, 1, 0f);
+        scannerFilter.color = new Color(1, 1, 1, 0f);
+    }
+
     public void StartFade() {
         fadeCoroutine = StartCoroutine(Fade(1));
     }

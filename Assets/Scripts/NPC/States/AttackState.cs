@@ -12,7 +12,7 @@ public class AttackState : BaseState
     // Start is called before the first frame update
     public override void Enter()
     {
-
+        npc.AnimHandsMoveToShoot();
     }
 
     // Update is called once per frame
@@ -20,7 +20,7 @@ public class AttackState : BaseState
     {
         if (npc.isPlayerAimingatMe || npc.isPlayerShootingatMe)
         {
-            npc.AnimHandsMoveToShoot();
+            
             npc.isPlayerAimingatMe = false;
             npc.isPlayerShootingatMe = false;
         }

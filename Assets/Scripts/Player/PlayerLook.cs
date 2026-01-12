@@ -8,6 +8,7 @@ public class PlayerLook : MonoBehaviour
     public Camera cam;
     public Transform Gun;
     public Transform cameraPivot;
+    public float lerpFactor = 0.2f;
     private float xRotation = 0f;
 
     private float fieldOfView = 40f;
@@ -38,13 +39,13 @@ public class PlayerLook : MonoBehaviour
         {
             if (Gun.position.x == aimingGunPositionX) return;
             Gun.localPosition = new Vector3(aimingGunPositionX, Gun.localPosition.y, Gun.localPosition.z);
-            cam.fieldOfView = aimFieldOfView;
+            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, aimFieldOfView, lerpFactor);
             
         }
         else
         {
             if (Gun.position.x == gunPositionX) return;
-            cam.fieldOfView = fieldOfView;
+            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fieldOfView, lerpFactor);
             Gun.localPosition = new Vector3(gunPositionX, Gun.localPosition.y, Gun.localPosition.z);
         }
     }

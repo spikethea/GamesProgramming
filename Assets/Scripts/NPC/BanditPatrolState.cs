@@ -2,7 +2,11 @@
 {
     public override void Perform()
     {
-        PatrolCycle(); 
+
+        if (npc.path != null)
+        {
+            PatrolCycle();
+        }
         if (npc.CanSeePlayer())
         {
             stateMachine.ChangeState(new AttackState());

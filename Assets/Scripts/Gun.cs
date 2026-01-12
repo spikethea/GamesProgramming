@@ -7,6 +7,8 @@ public class Gun : MonoBehaviour
 {
     public MeshRenderer renderer;
     public MeshRenderer blueRenderer;
+    public PlayerInput inputManager;
+    private PlayerInput.OnFootActions OnFoot;
 
     [Header("Bullets")]
     public BulletMagazine bulletMagazine;
@@ -22,7 +24,10 @@ public class Gun : MonoBehaviour
     public AudioSource Source;
     public AudioClip ShootingClip;
 
-
+    public void Awake()
+    {
+        OnFoot = inputManager.OnFoot;
+    }
 
     //public CinemachineImpulseSource Impulse;
     public void Hide() 
@@ -45,7 +50,7 @@ public class Gun : MonoBehaviour
         if (ReloadTimer > 0)
             return;
 
-        if (Input.GetMouseButtonDown(0))
+        if (OnFoot.Shoot.IsPressed())
         {
             Fire();
         }

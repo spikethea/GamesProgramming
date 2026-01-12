@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SpaceshipMotor : MonoBehaviour
 {
@@ -9,8 +11,6 @@ public class SpaceshipMotor : MonoBehaviour
 
     //State Variables
     private bool isGrounded = false;
-    private bool isEngineOn = true;
-    private bool isBoosting;
 
     //Movement Settings
     public float speed;
@@ -25,6 +25,10 @@ public class SpaceshipMotor : MonoBehaviour
     public GameObject childMesh;
     public float amplitudeY = 0.1f;
     private Vector3 startMeshPos;
+
+    // Tilt Lerping
+    private Vector3 tiltAngle;
+    float maxTilt = 15f;
 
     // Start is called before the first frame update
     void Start()
@@ -55,9 +59,7 @@ public class SpaceshipMotor : MonoBehaviour
         Vector3 moveDirection = Vector3.zero;
         moveDirection.x = input.y;
 
-
-
-        if (!isGrounded && isEngineOn) {
+        if (!isGrounded) {
             if (isBoosting)
             {
                 Vector3 targetPosition = transform.position + transform.TransformDirection(moveDirection) * boostSpeed;
@@ -80,18 +82,38 @@ public class SpaceshipMotor : MonoBehaviour
                     smoothTime
                 );
             }
-                //Debug.Log($"Force: {moveDirection * speed} | Vel: {rb.linearVelocity}");
-                //Vector3 force = moveDirection * speed;
-                //rb.AddForce(force, ForceMode.Force);
+            //Debug.Log($"Force: {moveDirection * speed} | Vel: {rb.linearVelocity}");
+            //Vector3 force = moveDirection * speed;
+            //rb.AddForce(force, ForceMode.Force);
 
-                if (input.x == 1) {
-            transform.Rotate(Vector3.up * Time.fixedDeltaTime * 50f);
-            } else if (input.x == -1) {
-                transform.Rotate(Vector3.up * Time.fixedDeltaTime * -50f);
+            if (input.x == 1)
+            {
+                //Turn
+                transform.Rotate(Vector3.up * Time.fixedDeltaTime * 25f);
+
+                //Tilt
+                tiltAngle.x += Time.fixedDeltaTime * 1f;
             }
+            else if (input.x == -1)
+            {
+                //Turn
+                transform.Rotate(Vector3.up * Time.fixedDeltaTime * -25f);
+
+                //Tilt
+                tiltAngle.x -= Time.fixedDeltaTime * 1f;
+            }
+            else
+            {
+                tiltAngle.x = Mathf.Lerp(tiltAngle.x, 0f, Time.fixedDeltaTime * 1f);
+            }
+
+            tiltAngle.x = Mathf.Clamp(tiltAngle.x, -maxTilt, maxTilt);
+
+            childMesh.transform.localEulerAngles = new Vector3(tiltAngle.x, 0f, 0f);
+
         }
 
-        if (isBoosting && isEngineOn) {
+        if (isBoosting) {
             rb.MovePosition(rb.position + moveDirection * boostSpeed * Time.fixedDeltaTime);
         }
         //controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);

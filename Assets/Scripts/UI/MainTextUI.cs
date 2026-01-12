@@ -30,12 +30,18 @@ public class MainTextUI : MonoBehaviour
 
 
 
-    public void SetTarget(Target target)
+    public void SetTarget(Convict target)
     {
         BountyText.text = $"Target: {target.name}\nLocation: {target.location}";
     }
 
-    public void PreviewTarget(Target target)
+    public void CapturedTarget() {
+        BountyText.text = "";
+        CentreText.text = "Bountry Completed";
+        Invoke(nameof(ClearCentreText), 3f);
+    }
+
+    public void PreviewTarget(Convict target)
     {
         CentreText.text = $"Name: {target.name} \n Wanted For: {target.crime} \n Last Seen: {target.location} \n\n Reward: ${target.reward}";
     }

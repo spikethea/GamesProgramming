@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public UIManager UI;
 
     // Game Objectives
-    public Target currentTarget;
+    public Convict currentTarget;
 
 
     private void Awake()

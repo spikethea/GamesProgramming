@@ -1,13 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 public class SpaceshipManager : MonoBehaviour
 {
+    [SerializeField] private UIManager UI;
     public SpaceshipMotor motor;
-
-
-
+   
     public GameObject Player;
 
     private InputManager PlayerInput;
@@ -18,6 +18,8 @@ public class SpaceshipManager : MonoBehaviour
     public Transform exitPoint;
 
     public bool inSpaceship = false;
+    public bool isEngineOn = false;
+    public float checkDistance = 500.0f;
 
     // Player Reference
     private PlayerLook playerLook;
@@ -33,6 +35,21 @@ public class SpaceshipManager : MonoBehaviour
 
         Flying = PlayerInput.Flying;
         onFoot = PlayerInput.onFoot;
+
+        Flying.Engine.performed += OnEngineToggle;
+    }
+
+    void OnEngineToggle(InputAction.CallbackContext context)
+    {
+        isEngineOn = !isEngineOn;
+        if (isEngineOn)
+        {   
+            UI.mainUI.SetPrompt("Turn Off Engine & Dock [E]");
+        }
+        else {
+            UI.mainUI.SetPrompt("Turn on Engine [E] / Exit Vehicle [Q]");
+        }
+            Debug.Log("Is Engine On: " + isEngineOn);
     }
 
     // Update is called once per frame
@@ -40,18 +57,37 @@ public class SpaceshipManager : MonoBehaviour
     {
         if (inSpaceship)
         {
-
             motor.ResetYPosition();
-            MoveSpaceship();
+            
+            if (isEngineOn) {
+                MoveSpaceship();
+            }
+            
 
             //Exiting Spaceship
             if (Flying.Exit.IsPressed()) {
-                ExitSpaceship();
+                // check there is a nav mesh to drop on
+                //NavMeshHit hit;
+                //if (!NavMesh.SamplePosition(
+                //    transform.position,
+                //    out hit,
+                //    checkDistance,
+                //    NavMesh.AllAreas
+                //))
+                //{
+                //    Debug.Log("No Nav Mesh Near");
+                //}
+                
+                    ExitSpaceship();
+
+
+                    
             }
         }
         else {
-            motor.ApplyVerticalOscillation();
+            
         }
+        motor.ApplyVerticalOscillation();
     }
 
     public void EnterSpaceship()
@@ -63,7 +99,7 @@ public class SpaceshipManager : MonoBehaviour
         //Debug.Log("sittingPoint.rotation.y: " + sittingPoint.rotation.y);
 
         
-        Player.transform.parent = transform; 
+        Player.transform.parent = sittingPoint.transform; 
         Player.transform.rotation = sittingPoint.rotation;
 
         
@@ -73,13 +109,16 @@ public class SpaceshipManager : MonoBehaviour
         Debug.Log("Entering Spaceship...");
         playerLook.enabled = false;
         playerMotor.enabled = false;
+        playerInteract.enabled = false;
         
-        //Camera.main.transform.eulerAngles = new Vector3(0,0,0);
+        Camera.main.transform.localRotation = Quaternion.identity;
 
+        UI.mainUI.SetPrompt("Turn on Engine [E] / Exit Vehicle [Q]");
     }
 
-    public void ExitSpaceship()
+    void ExitSpaceship()
     {
+
         inSpaceship = false;
 
         PlayerInput.onFoot.Enable();
@@ -87,13 +126,14 @@ public class SpaceshipManager : MonoBehaviour
         Debug.Log("Exiting Spaceship...");
         playerLook.enabled = true;
         playerMotor.enabled = true;
+        playerInteract.enabled = true;
 
         playerMotor.transform.position = exitPoint.position;
     }
 
     private void MoveSpaceship()
     {
-        //motor.ProcessMove(Flying.Movement.ReadValue<Vector2>(), Flying.Boost.IsPressed());
+        motor.ProcessMove(Flying.Movement.ReadValue<Vector2>(), Flying.Boost.IsPressed());
         //motor.ProcessMove(Flying.Movement.ReadValue<Vector2>(), Flying);
 
     }

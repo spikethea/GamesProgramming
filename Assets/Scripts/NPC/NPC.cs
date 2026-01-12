@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Animations;
+
 
 public class NPC : MonoBehaviour
 {
@@ -14,11 +12,11 @@ public class NPC : MonoBehaviour
     public NavMeshAgent Agent { get => agent; }
     public GameObject Player { get => player; }
 
-    [Header("How")]
+    [Header("Health")]
     public int health = 10;
 
     public Vector3 LastKnownPos { get => lastKnownPos; set => lastKnownPos = value; }
-    // just for debugging purposes
+    [Header("Helper Objects")]
     public CharacterPath path;
     public GameObject debugSphere;
 
@@ -52,8 +50,23 @@ public class NPC : MonoBehaviour
     private GameObject _floatingTextInstance;
     private Camera _cam;
 
+    [Header("Convict")]
+    public Convict convict;
+
     private void Awake()
     {
+        // If the NPC is a convict the caption switches to thier name
+        if(convict != null)
+        Caption = convict.name;
+
+        // Unparenting Helper GameObjects
+        if (path != null)
+        path.transform.SetParent(null, true);
+
+        if(debugSphere != null)
+            debugSphere.transform.SetParent(null, true);
+
+        // Floating Text Caption
         Vector3 pos = new Vector3(0f, 3.5f, 0f);
         _floatingTextInstance = Instantiate(FloatingTextPrefab, this.transform.position + pos, this.transform.rotation);
         _floatingTextInstance.GetComponentInChildren<TextMeshPro>().fontSize = captionFontSize;
@@ -100,11 +113,12 @@ public class NPC : MonoBehaviour
         FaceCaptionAtCamera();
     }
 
-    public void takeDamage(int damagePoints) {
+    virtual public void takeDamage(int damagePoints) {
         health -= damagePoints;
         isPlayerShootingatMe = true;
 
-        if (health <= 0) {
+        if (health <= 0)
+        {
             AnimDeath();
         }
     }
@@ -123,17 +137,22 @@ public class NPC : MonoBehaviour
         animator.Play("Death");
         Debug.Log("AnimDeath EVENT FIRED");
         Debug.Log(this);
+        Invoke(nameof(Kill), 3f);
     }
     
     public void Kill() {
         Debug.Log("Killing NPC FIRED");
         Debug.Log(this);
 
+        if (convict != null)
+            Player.GetComponent<PlayerMotor>().EarnCredits(convict.reward);
         Destroy(this.gameObject);
     }
 
     public void PoseHandsDown()
     {
+        if (health <= 0) return;
+
         Debug.Log("PoseHandsDown EVENT FIRED");
         Debug.Log(this);
     }
@@ -147,6 +166,8 @@ public class NPC : MonoBehaviour
 
     public void AnimHandsMoveToShoot()
     {
+        if (health <= 0) return;
+        
         animator.Play("Guard");
         Debug.Log("AnimHandsMoveToShoot EVENT FIRED");
         Debug.Log(this);
@@ -154,6 +175,8 @@ public class NPC : MonoBehaviour
 
     public void PoseShooting()
     {
+        if (health <= 0) return;
+
         animator.Play("Shooting");
         Debug.Log("PoseShooting EVENT FIRED");
         Debug.Log(this);

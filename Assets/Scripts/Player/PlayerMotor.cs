@@ -11,7 +11,10 @@ public class PlayerMotor : MonoBehaviour
     private bool isCrouched;
 
     // Player Stats
+    [Header("Player Stats")]
     public int currentHealth = 3;
+    public int currentCredits = 0;
+
 
     // Weapons
     public bool ScannerIsEquipped = false;
@@ -54,13 +57,21 @@ public class PlayerMotor : MonoBehaviour
         }
     }
 
-
+    // Player stats
     public void takeDamage(int damagePoints)
     {
         currentHealth -= damagePoints;
         UI.playerStat.UpdateHealth(currentHealth);
         UI.graphicsUI.StartFade();
     }
+
+    public void EarnCredits(int credits) {
+        currentCredits += credits;
+        UI.playerStat.UpdateCredits(currentCredits);
+        UI.mainUI.CapturedTarget();
+    }
+
+
     public void ProcessMove(Vector2 input)
     {
         
