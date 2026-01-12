@@ -9,7 +9,7 @@ public class MainTextUI : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     private void Awake()
@@ -32,8 +32,16 @@ public class MainTextUI : MonoBehaviour
 
     public void SetTarget(Target target)
     {
-        CentreText.text = $"Name: {target.name} \n Wanted For: {target.crime} \n Last Seen: {target.location} \n\n Reward: ${target.reward}";
         BountyText.text = $"Target: {target.name}\nLocation: {target.location}";
+    }
+
+    public void PreviewTarget(Target target)
+    {
+        CentreText.text = $"Name: {target.name} \n Wanted For: {target.crime} \n Last Seen: {target.location} \n\n Reward: ${target.reward}";
+    }
+
+    public void ClearCentreText() {
+        CentreText.text = "";
     }
 
     public void ClearText()

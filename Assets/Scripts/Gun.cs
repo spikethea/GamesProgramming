@@ -9,8 +9,10 @@ public class Gun : MonoBehaviour
     public MeshRenderer blueRenderer;
 
     [Header("Bullets")]
-    public Bullet BulletPrefab;
-    public Transform FirePoint;
+    public BulletMagazine bulletMagazine;
+    public float bulletSpeed = 20f;
+    public Transform firePoint;
+    
 
     [Header("Reload")]
     public float ReloadTime = 1;
@@ -20,10 +22,9 @@ public class Gun : MonoBehaviour
     public AudioSource Source;
     public AudioClip ShootingClip;
 
-    public List<Bullet> bullets = new List<Bullet>();
+
 
     //public CinemachineImpulseSource Impulse;
-
     public void Hide() 
     {
         renderer.enabled = false;
@@ -44,27 +45,22 @@ public class Gun : MonoBehaviour
         if (ReloadTimer > 0)
             return;
 
-        if (bullets.Count <= 3)
+        if (Input.GetMouseButtonDown(0))
         {
-            SpawnBulletPrefab();
-        }
-
-
-        
-        
-    }
-
-    private void SpawnBulletPrefab() {
-    if (Input.GetMouseButtonDown(0))
-        {
-            ReloadTimer = ReloadTime;
-
-            Bullet bullet = Instantiate(BulletPrefab, FirePoint.position, FirePoint.rotation);
-            Source.PlayOneShot(ShootingClip);
-            // add force rigidbody of the bullet.
-            bullet.GetComponent<Rigidbody>().linearVelocity = FirePoint.forward * 40f;
-            ReloadTimer = 0;
-            bullets.Add(bullet);
+            Fire();
         }
     }
+
+    void Fire()
+    {
+        GameObject bullet = bulletMagazine.GetBullet();
+        if (bullet == null) return;
+
+        bullet.transform.position = firePoint.position;
+        bullet.transform.rotation = firePoint.rotation;
+
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        rb.linearVelocity = firePoint.forward * bulletSpeed;
+    }
+    
 }

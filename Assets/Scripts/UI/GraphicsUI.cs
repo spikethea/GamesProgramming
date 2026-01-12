@@ -22,7 +22,7 @@ public class GraphicsUI : MonoBehaviour
         scannerColor = scannerFilter.material.color;
 
         damageFilter.color = new Color(1, 1, 1, 0f);
-        scannerFilter.color = new Color(1, 1, 1, 0);
+        scannerFilter.color = new Color(1, 1, 1, 0f);
     }
 
     public void StartFade() {
@@ -48,14 +48,16 @@ public class GraphicsUI : MonoBehaviour
 
     public void ShowScanner()
     {
-        scannerFilter.enabled = true;
-        //scannerColor = new Color(1, 1, 1, 1);
+        //scannerFilter.enabled = true;
+        scannerColor = new Color(1, 1, 1, 1f);
+        scannerFilter.color = scannerColor;
     }
 
     public void HideScanner()
     {
-        scannerFilter.enabled = false;
-        //scannerColor = new Color(1, 1, 1, 0);
+        //scannerFilter.enabled = false;
+        scannerColor = new Color(1, 1, 1, 0f);
+        scannerFilter.color = scannerColor;
     }
 
     // Update is called once per frame

@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 8268007682880276767}
   - component: {fileID: 4541718064064336054}
   - component: {fileID: 5127758747280439772}
+  - component: {fileID: 9128191427751886593}
   m_Layer: 0
-  m_Name: Gun 1
+  m_Name: Player Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,8 +51,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Gun
   renderer: {fileID: 2286628145897323343}
   blueRenderer: {fileID: 5584898421994337180}
-  BulletPrefab: {fileID: 7922415120016560117, guid: cbf55158446544c469594320c3778466, type: 3}
-  FirePoint: {fileID: 3710082792025297038}
+  bulletMagazine: {fileID: 9128191427751886593}
+  bulletSpeed: 20
+  firePoint: {fileID: 3710082792025297038}
   ReloadTime: 1
   ReloadTimer: 0
   Source: {fileID: 5127758747280439772}
@@ -153,6 +155,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &9128191427751886593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1259097327245693236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6741718d1b11c8c41936311446bd7dc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletMagazine
+  bulletPrefab: {fileID: 582403024916061206, guid: cbf55158446544c469594320c3778466, type: 3}
+  MagazineSize: 20
 --- !u!1 &2102421983698759643
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,7 +388,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1351
+  m_VersionIndex: 1369
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -448,6 +464,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &8398754378386457555
 MeshFilter:
@@ -503,13 +520,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2696040054680347678}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0.154, z: -0.674}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8268007682880276767}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &5932557857841873087
 GameObject:
   m_ObjectHideFlags: 0
@@ -1329,7 +1346,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1351
+  m_VersionIndex: 1369
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1405,6 +1422,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &2210305895487755628
 MeshFilter:

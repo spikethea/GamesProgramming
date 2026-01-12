@@ -44,11 +44,11 @@ public class PlayerMotor : MonoBehaviour
     public void ProcessAim(bool isAiming)
     {
         if (!ScannerIsEquipped) return;
-        if (isAiming && !UI.graphicsUI.scannerFilter.enabled)
+        if (isAiming)
         {
             UI.graphicsUI.ShowScanner();
         }
-        else if (isAiming && UI.graphicsUI.scannerFilter.enabled)
+        else
         {
             UI.graphicsUI.HideScanner();
         }

@@ -14,7 +14,7 @@ public class PanicState : BaseState
 	{
         // Disable the Navmesh control on rotation
         npc.agent.updateRotation = false;
-
+        Debug.Log("Entering Panic State");
         npc.AnimHandsUp();
 
         // Set NPC to freeze and panic animation
@@ -53,7 +53,7 @@ public class PanicState : BaseState
         //    freezeRoutine = null;
             
         //}
-        
+        Debug.Log("Exiting Panic State");
         npc.PoseHandsDown();
 
         //Re-enable Navmesh rotation control

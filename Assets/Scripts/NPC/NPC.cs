@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations;
 
 public class NPC : MonoBehaviour
 {
@@ -42,6 +44,43 @@ public class NPC : MonoBehaviour
     [Header("Dynamic Info")]
     public bool isPlayerAimingatMe = false;
     public bool isPlayerShootingatMe = false;
+
+    [Header("Scanner")]
+    public string Caption = "-";
+    public int captionFontSize = 30;
+    public GameObject FloatingTextPrefab;
+    private GameObject _floatingTextInstance;
+    private Camera _cam;
+
+    private void Awake()
+    {
+        Vector3 pos = new Vector3(0f, 3.5f, 0f);
+        _floatingTextInstance = Instantiate(FloatingTextPrefab, this.transform.position + pos, this.transform.rotation);
+        _floatingTextInstance.GetComponentInChildren<TextMeshPro>().fontSize = captionFontSize;
+        _floatingTextInstance.GetComponentInChildren<TextMeshPro>().text = Caption;
+        HideFloatingText();
+        _floatingTextInstance.transform.parent = transform;
+        _cam = Camera.main;
+    }
+
+    private void FaceCaptionAtCamera() {
+        var rot = Quaternion.LookRotation(_floatingTextInstance.transform.position - _cam.transform.position);
+        _floatingTextInstance.transform.rotation = rot;
+    }
+
+    public void ShowFloatingText()
+    {
+        _floatingTextInstance.SetActive(true);
+        Debug.Log("Show");
+
+    }
+
+    public void HideFloatingText()
+    {
+        _floatingTextInstance.SetActive(false);
+        Debug.Log("Hide");
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,11 +96,17 @@ public class NPC : MonoBehaviour
         CanSeePlayer();
         currentState = stateMachine.activeState.ToString();
         debugSphere.transform.position = lastKnownPos;
+
+        FaceCaptionAtCamera();
     }
 
     public void takeDamage(int damagePoints) {
         health -= damagePoints;
         isPlayerShootingatMe = true;
+
+        if (health <= 0) {
+            AnimDeath();
+        }
     }
 
     public void AnimPanic()
@@ -69,6 +114,22 @@ public class NPC : MonoBehaviour
         animator.Play("Panic", 0, 0f);
         Debug.Log("AnimPanic EVENT FIRED");
         Debug.Log(this);
+    }
+
+    
+
+    public void AnimDeath()
+    {
+        animator.Play("Death");
+        Debug.Log("AnimDeath EVENT FIRED");
+        Debug.Log(this);
+    }
+    
+    public void Kill() {
+        Debug.Log("Killing NPC FIRED");
+        Debug.Log(this);
+
+        Destroy(this.gameObject);
     }
 
     public void PoseHandsDown()
@@ -79,23 +140,21 @@ public class NPC : MonoBehaviour
 
     public void AnimHandsUp() {
         //var state = animator.GetCurrentAnimatorStateInfo(0);
-        //animator.Play("Civilian");
+        animator.Play("Civilian");
         Debug.Log("AnimHandsUp EVENT FIRED");
         Debug.Log(this);
     }
 
     public void AnimHandsMoveToShoot()
     {
+        animator.Play("Guard");
         Debug.Log("AnimHandsMoveToShoot EVENT FIRED");
         Debug.Log(this);
     }
 
     public void PoseShooting()
     {
-        var state = animator.GetCurrentAnimatorStateInfo(0);
-        animator.Play(state.fullPathHash, 0, 0.99f);
-        animator.Update(0f);                       // force evaluation
-        animator.speed = 0f;
+        animator.Play("Shooting");
         Debug.Log("PoseShooting EVENT FIRED");
         Debug.Log(this);
     }

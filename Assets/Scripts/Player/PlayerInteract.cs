@@ -14,6 +14,7 @@ public class PlayerInteract : MonoBehaviour
     public InputManager inputManager;
     private Interactable lastHit;
     private Scannable lastHitScan;
+    private NPC lastHitNPC;
     // Start is called before the first frame update
     void Start()
     {
@@ -65,7 +66,7 @@ public class PlayerInteract : MonoBehaviour
                     }
 
                     if (scannable.GetComponent<IdentificationMachine>()) {
-                        scannable.GetComponent<IdentificationMachine>().Identify();
+                        scannable.GetComponent<IdentificationMachine>().Preview();
                     }
                 }
             }
@@ -74,10 +75,18 @@ public class PlayerInteract : MonoBehaviour
             if (hitInfo.collider.GetComponent<NPC>() != null) {
                 NPC npc = hitInfo.collider.GetComponent<NPC>();
                 PlayerMotor motor = GetComponent<PlayerMotor>();
-                if (inputManager.isAiming & !motor.ScannerIsEquipped) {
+                if (!inputManager.isAiming) return;
+                if (motor.ScannerIsEquipped)
+                {
+                    npc.ShowFloatingText();
+                    lastHitNPC = npc;
+                }
+                else
+                {
                     Debug.Log("Aiming Gun at NPC");
                     npc.isPlayerAimingatMe = true;
                 }
+                
             }
         }
         else
@@ -97,9 +106,15 @@ public class PlayerInteract : MonoBehaviour
                 lastHitScan.HideFloatingText();
                 if (lastHitScan.GetComponent<IdentificationMachine>() != null)
                 {
-                    UI.mainUI.ClearText();
+                    UI.mainUI.ClearCentreText();
                 }
                 lastHitScan = null;
+            }
+
+            if (lastHitNPC != null)
+            {
+                lastHitNPC.HideFloatingText();
+                lastHitNPC = null;
             }
 
 

@@ -3,7 +3,7 @@
     public override void Perform()
     {
         PatrolCycle(); 
-        if (npc.CanSeePlayer() && npc.isPlayerAimingatMe)
+        if (npc.CanSeePlayer())
         {
             stateMachine.ChangeState(new AttackState());
         }

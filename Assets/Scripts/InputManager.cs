@@ -49,7 +49,7 @@ public class InputManager : MonoBehaviour
             motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
             motor.switchWeapons(onFoot.Scroll.ReadValue<Vector2>());
         } else {
-            spaceshipManager.motor.ProcessMove(Flying.Movement.ReadValue<Vector2>());
+            spaceshipManager.motor.ProcessMove(Flying.Movement.ReadValue<Vector2>(), Flying.Boost.IsPressed());
         }
     }
 

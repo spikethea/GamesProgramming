@@ -6,14 +6,19 @@ public class SpaceshipMotor : MonoBehaviour
 {
     [SerializeField] UIManager UI;
     public Rigidbody rb;
-    private Vector3 playerVelocity;
+
+    //State Variables
     private bool isGrounded = false;
     private bool isEngineOn = true;
     private bool isBoosting;
 
-    public float speed = 20f;
-    public float boostSpeed = 25f;
+    //Movement Settings
+    public float speed;
+    public float boostSpeed;
     public float shipHeight = 1.5f;
+    //Smooth Damping
+    public float smoothTime = 0.2f;
+    private Vector3 playerVelocity;
 
     // Vertical Oscillation
     public float Yspeed = 5f;
@@ -44,7 +49,7 @@ public class SpaceshipMotor : MonoBehaviour
         
     }
 
-    public void ProcessMove(Vector2 input)
+    public void ProcessMove(Vector2 input, bool isBoosting)
     {
         
         Vector3 moveDirection = Vector3.zero;
@@ -55,11 +60,25 @@ public class SpaceshipMotor : MonoBehaviour
         if (!isGrounded && isEngineOn) {
             if (isBoosting)
             {
-                transform.Translate(moveDirection * boostSpeed * Time.fixedDeltaTime, transform);
+                Vector3 targetPosition = transform.position + transform.TransformDirection(moveDirection) * boostSpeed;
+
+                transform.position = Vector3.SmoothDamp(
+                    transform.position,
+                    targetPosition,
+                    ref playerVelocity,
+                    smoothTime
+                );
             }
             else
             {
-                transform.Translate(moveDirection * speed * Time.fixedDeltaTime, transform);
+                Vector3 targetPosition = transform.position + transform.TransformDirection(moveDirection) * speed;
+
+                transform.position = Vector3.SmoothDamp(
+                    transform.position,
+                    targetPosition,
+                    ref playerVelocity,
+                    smoothTime
+                );
             }
                 //Debug.Log($"Force: {moveDirection * speed} | Vel: {rb.linearVelocity}");
                 //Vector3 force = moveDirection * speed;

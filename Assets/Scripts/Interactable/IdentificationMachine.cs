@@ -25,7 +25,17 @@ public class IdentificationMachine: MonoBehaviour {
         target.reward = Reward;
     }
 
-    public void Identify() {
+    public void SetBountyTarget() {
+        Game.currentTarget = target;
+        UI.mainUI.SetTarget(target);
+    }
+
+    public void Preview() {
+        UI.mainUI.PreviewTarget(target);
+    }
+
+    public void Identify()
+    {
         Game.currentTarget = target;
         UI.mainUI.SetTarget(target);
     }

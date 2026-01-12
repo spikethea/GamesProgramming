@@ -2,14 +2,13 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    BulletMagazine bulletMagazine;
     public Rigidbody Rigidbody;
-
-    [Range(0, 100)]
-    public float Speed = 10;
 
     private void Start()
     {
-        Rigidbody.linearVelocity = transform.forward * Speed;
+        bulletMagazine = FindAnyObjectByType<BulletMagazine>();
+        //Rigidbody.linearVelocity = transform.forward * Speed;
     }
 
     void OnTriggerEnter(Collider other)
@@ -19,16 +18,31 @@ public class Bullet : MonoBehaviour
             if (nPC != null)
             {
                 nPC.takeDamage(2);
-                Destroy(gameObject);
+                bulletMagazine.ReturnBullet(gameObject);
             }
 
             PlayerMotor player = other.GetComponent<PlayerMotor>();
             if (player != null)
             {
                 player.takeDamage(1);
-                Destroy(gameObject);
+                bulletMagazine.ReturnBullet(gameObject);
             }
             
         }
+    }
+
+    private void OnEnable()
+    {
+        Invoke(nameof(ReturnToMagazine), 3f);
+    }
+
+    private void OnDisable()
+    {
+        CancelInvoke();
+    }
+
+    void ReturnToMagazine()
+    {
+        bulletMagazine.ReturnBullet(gameObject);
     }
 }

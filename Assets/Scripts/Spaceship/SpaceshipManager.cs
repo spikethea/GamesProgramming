@@ -93,7 +93,8 @@ public class SpaceshipManager : MonoBehaviour
 
     private void MoveSpaceship()
     {
-        motor.ProcessMove(Flying.Movement.ReadValue<Vector2>());
-        
+        //motor.ProcessMove(Flying.Movement.ReadValue<Vector2>(), Flying.Boost.IsPressed());
+        //motor.ProcessMove(Flying.Movement.ReadValue<Vector2>(), Flying);
+
     }
 }
