@@ -76,6 +76,11 @@ public class NPC : MonoBehaviour
         _cam = Camera.main;
     }
 
+    public void OnSoundHeard() {
+        isPlayerShootingatMe = true;
+        lastKnownPos = player.transform.position;
+    }
+
     private void FaceCaptionAtCamera() {
         var rot = Quaternion.LookRotation(_floatingTextInstance.transform.position - _cam.transform.position);
         _floatingTextInstance.transform.rotation = rot;

@@ -21,6 +21,10 @@ public class SpaceshipManager : MonoBehaviour
     public bool isEngineOn = false;
     public float checkDistance = 500.0f;
 
+    [Header("Audio")]
+    public AudioSource EngineAudioSource;
+    public AudioClip EngineStartClip;
+
     // Player Reference
     private PlayerLook playerLook;
     private PlayerMotor playerMotor;
@@ -37,16 +41,20 @@ public class SpaceshipManager : MonoBehaviour
         onFoot = PlayerInput.onFoot;
 
         Flying.Engine.performed += OnEngineToggle;
+
+        EngineAudioSource.clip = EngineStartClip;
     }
 
     void OnEngineToggle(InputAction.CallbackContext context)
     {
         isEngineOn = !isEngineOn;
         if (isEngineOn)
-        {   
+        {
+            EngineAudioSource.Play();
             UI.mainUI.SetPrompt("Turn Off Engine & Dock [E]");
         }
         else {
+            EngineAudioSource.Pause();
             UI.mainUI.SetPrompt("Turn on Engine [E] / Exit Vehicle [Q]");
         }
             Debug.Log("Is Engine On: " + isEngineOn);
@@ -61,31 +69,17 @@ public class SpaceshipManager : MonoBehaviour
             
             if (isEngineOn) {
                 MoveSpaceship();
+
+                if (Flying.Boost.IsPressed())
+                {
+
+                }
             }
-            
 
             //Exiting Spaceship
             if (Flying.Exit.IsPressed()) {
-                // check there is a nav mesh to drop on
-                //NavMeshHit hit;
-                //if (!NavMesh.SamplePosition(
-                //    transform.position,
-                //    out hit,
-                //    checkDistance,
-                //    NavMesh.AllAreas
-                //))
-                //{
-                //    Debug.Log("No Nav Mesh Near");
-                //}
-                
-                    ExitSpaceship();
-
-
-                    
+               ExitSpaceship();   
             }
-        }
-        else {
-            
         }
         motor.ApplyVerticalOscillation();
     }

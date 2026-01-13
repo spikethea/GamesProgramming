@@ -1,19 +1,25 @@
 //using Cinemachine;
 
-using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    public MeshRenderer renderer;
-    public MeshRenderer blueRenderer;
-    public PlayerInput inputManager;
-    private PlayerInput.OnFootActions OnFoot;
-
+    public GameObject Player;
     [Header("Bullets")]
     public BulletMagazine bulletMagazine;
     public float bulletSpeed = 20f;
+    public float gunshotSoundRadius = 20f;
     public Transform firePoint;
+
+    [Header("Input")]
+    private InputManager inputManager;
+    public PlayerInput.OnFootActions OnFoot;
+    
+    public MeshRenderer MeshRenderer;
+    public MeshRenderer blueRenderer;
+    
+    
     
 
     [Header("Reload")]
@@ -24,27 +30,31 @@ public class Gun : MonoBehaviour
     public AudioSource Source;
     public AudioClip ShootingClip;
 
-    public void Awake()
+    public void Start()
     {
-        OnFoot = inputManager.OnFoot;
+        ReloadTimer = 0;
+
+        inputManager = Player.GetComponent<InputManager>();
+
+        OnFoot = inputManager.onFoot;
     }
 
     //public CinemachineImpulseSource Impulse;
     public void Hide() 
     {
-        renderer.enabled = false;
+        MeshRenderer.enabled = false;
         blueRenderer.enabled = false;
     }
 
     public void Show()
     {
-        renderer.enabled = true;
+        MeshRenderer.enabled = true;
         blueRenderer.enabled = true;
     }
 
     private void Update()
     {
-        if (!renderer.enabled)
+        if (!MeshRenderer.enabled)
             return;
         ReloadTimer -= Time.deltaTime;
         if (ReloadTimer > 0)
@@ -53,6 +63,7 @@ public class Gun : MonoBehaviour
         if (OnFoot.Shoot.IsPressed())
         {
             Fire();
+            AlertNearbyNPCs();
         }
     }
 
@@ -67,5 +78,19 @@ public class Gun : MonoBehaviour
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         rb.linearVelocity = firePoint.forward * bulletSpeed;
     }
-    
+
+    void AlertNearbyNPCs()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, gunshotSoundRadius);
+
+        foreach (Collider hit in hits)
+        {
+            NPC npc = hit.GetComponent<NPC>();
+            if (npc != null)
+            {
+                npc.OnSoundHeard();
+            }
+        }
+    }
+
 }
