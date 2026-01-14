@@ -33,6 +33,7 @@ public class SpaceshipMotor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         startMeshPos = childMesh.transform.localPosition;
     }
 
@@ -55,7 +56,7 @@ public class SpaceshipMotor : MonoBehaviour
 
     public void ProcessMove(Vector2 input, bool isBoosting)
     {
-        
+
         Vector3 moveDirection = Vector3.zero;
         moveDirection.x = input.y;
 

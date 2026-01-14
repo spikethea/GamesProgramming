@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMotor : MonoBehaviour
 {
     [SerializeField] private UIManager UI;
     private CharacterController controller;
     private Vector3 playerVelocity;
+    private bool hasGameStarted = false;
     private bool isGrounded;
     private bool isCrouched;
+    
 
     // Player Stats
     [Header("Player Stats")]
@@ -28,12 +31,21 @@ public class PlayerMotor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Invoke(nameof(InitGame), 2f);
         controller = GetComponent<CharacterController>();
+    }
+
+    private void InitGame()
+    {
+        UI.mainUI.ClearTitleScreen();
+        UI.graphicsUI.ClearTitleScreen();
+        hasGameStarted = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!hasGameStarted) return;
         isGrounded = controller.isGrounded;
 
         if (transform.position.y < - 30)
@@ -46,7 +58,9 @@ public class PlayerMotor : MonoBehaviour
 
     public void ProcessAim(bool isAiming)
     {
+        if (!hasGameStarted) return;
         if (!ScannerIsEquipped) return;
+
         if (isAiming)
         {
             UI.graphicsUI.ShowScanner();
@@ -63,6 +77,20 @@ public class PlayerMotor : MonoBehaviour
         currentHealth -= damagePoints;
         UI.playerStat.UpdateHealth(currentHealth);
         UI.graphicsUI.StartFade();
+
+        if (currentHealth < 0) {
+            Death();
+        }
+    }
+
+    public void Death() {
+        UI.mainUI.SetMainText("You Died");
+        Invoke(nameof(Reset), 3f);
+    }
+
+    void Reset()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void EarnCredits(int credits) {
@@ -74,7 +102,6 @@ public class PlayerMotor : MonoBehaviour
 
     public void ProcessMove(Vector2 input)
     {
-        
         Vector3 moveDirection = Vector3.zero;
         moveDirection.x = input.x;
         moveDirection.z = input.y;
@@ -111,13 +138,11 @@ public class PlayerMotor : MonoBehaviour
         ScannerIsEquipped = !ScannerIsEquipped;
 
         if (ScannerIsEquipped) {
-            ScannerIsEquipped = false;
             gun.Show();
             scanner.Hide();
             UI.playerStat.isWeaponEquipped(true);
         } else
         {
-            ScannerIsEquipped = true;
             gun.Hide();
             scanner.Show();
             UI.playerStat.isWeaponEquipped(false);

@@ -1,3 +1,4 @@
+using System.Drawing;
 using TMPro;
 using UnityEngine;
 
@@ -6,15 +7,19 @@ public class Scannable : Interactable
     public GameObject FloatingTextPrefab;
     private GameObject _floatingTextInstance;
     public string Caption = "Default";
+    public float height;
+    public float size;
     private Camera _cam;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        Vector3 pos = new Vector3(0f, 5f, 0f);
+        Vector3 pos = new Vector3(0f, height * size, 0f);
         _floatingTextInstance = Instantiate(FloatingTextPrefab, this.transform.position + pos, this.transform.rotation);
+
         _floatingTextInstance.GetComponentInChildren<TextMeshPro>().text = Caption;
         HideFloatingText();
         _floatingTextInstance.transform.parent = transform;
+        _floatingTextInstance.transform.localScale = new Vector3(size, size, size);
         _cam = Camera.main;
 
     }

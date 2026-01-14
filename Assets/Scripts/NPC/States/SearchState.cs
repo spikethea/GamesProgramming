@@ -17,6 +17,8 @@ public class SearchState : BaseState
         {
             stateMachine.ChangeState(new AttackState());
         }
+        
+        Debug.Log(stateMachine.name);
 
         if (npc.Agent.remainingDistance < npc.Agent.stoppingDistance)
         {
@@ -28,9 +30,21 @@ public class SearchState : BaseState
                 npc.Agent.SetDestination(npc.transform.position + (Random.insideUnitSphere * 10));
                 moveTimer = 0;
             }
+            
             if (searchTimer > 10)
             {
-                stateMachine.ChangeState(new PatrolState());
+                
+                if (npc.GetComponent<BanditStateMachine>() != null) {
+                    stateMachine.ChangeState(new BanditPatrolState());
+                }
+                else if (npc.GetComponent<GuardStateMachine>() != null)
+                {
+                    GuardStateMachine guard = (GuardStateMachine)stateMachine;
+                    stateMachine.ChangeState(new GuardDefaultState(guard.botheredClip));
+                } else {
+                    stateMachine.ChangeState(new PatrolState());
+                }
+                
             }
             
         }

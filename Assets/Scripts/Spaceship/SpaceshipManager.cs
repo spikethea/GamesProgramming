@@ -51,7 +51,7 @@ public class SpaceshipManager : MonoBehaviour
         if (isEngineOn)
         {
             EngineAudioSource.Play();
-            UI.mainUI.SetPrompt("Turn Off Engine & Dock [E]");
+            UI.mainUI.SetPrompt("Turn Off Engine & Dock [E] BoostEngine [LShift]");
         }
         else {
             EngineAudioSource.Pause();
@@ -72,13 +72,16 @@ public class SpaceshipManager : MonoBehaviour
 
                 if (Flying.Boost.IsPressed())
                 {
-
+                    //EngineAudioSource.Effects
                 }
             }
 
             //Exiting Spaceship
             if (Flying.Exit.IsPressed()) {
-               ExitSpaceship();   
+                NavMeshHit hit;
+                if (!NavMesh.SamplePosition(exitPoint.position, out hit, checkDistance, NavMesh.AllAreas))
+                return;
+                ExitSpaceship();   
             }
         }
         motor.ApplyVerticalOscillation();
@@ -128,6 +131,16 @@ public class SpaceshipManager : MonoBehaviour
     private void MoveSpaceship()
     {
         motor.ProcessMove(Flying.Movement.ReadValue<Vector2>(), Flying.Boost.IsPressed());
+        if (Flying.Boost.IsPressed()) {
+            if(EngineAudioSource.pitch < 1.3f)
+            {
+                EngineAudioSource.pitch += 0.1f* Time.deltaTime;
+            }
+            
+        } else {
+            if (EngineAudioSource.pitch > 1.0f)
+                EngineAudioSource.pitch -= 0.1f * Time.deltaTime;
+        }
         //motor.ProcessMove(Flying.Movement.ReadValue<Vector2>(), Flying);
 
     }

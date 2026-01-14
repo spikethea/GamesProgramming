@@ -17,16 +17,22 @@ internal class GuardDefaultState : BaseState
     // Update is called once per frame
     public override void Perform()
     {
+        if (npc.isPlayerShootingatMe)
+        {
+            stateMachine.ChangeState(new AttackState());
+        }
+
         if (npc.CanSeePlayer() && npc.isPlayerAimingatMe)
         {
-            if (PatienceTimer == 0) {
-                npc.audioSource.PlayOneShot(audioClip);
-            }
-            PatienceTimer += Time.deltaTime;
-            if (PatienceTimer >= PatienceTime)
-            {
-                stateMachine.ChangeState(new AttackState());
-            }
+        if (PatienceTimer == 0) {
+            npc.audioSource.PlayOneShot(audioClip);
+        }
+
+        PatienceTimer += Time.deltaTime;
+        if (PatienceTimer >= PatienceTime)
+        {
+            stateMachine.ChangeState(new AttackState());
+        }
 
         }
         else {

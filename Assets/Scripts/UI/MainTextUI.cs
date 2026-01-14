@@ -24,7 +24,12 @@ public class MainTextUI : MonoBehaviour
 
     public void SetMainText(string prompt)
     {
-        PromptText.text = prompt;
+        CentreText.text = prompt;
+    }
+
+    public void ClearTitleScreen() {
+        CentreText.color = Color.white;
+        CentreText.text = "";
     }
 
 

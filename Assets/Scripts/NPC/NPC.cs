@@ -192,25 +192,25 @@ public class NPC : MonoBehaviour
     {
         if(player != null) 
         {
+            Vector3 npcPos = transform.position + Vector3.up * eyeHeight;
+            Vector3 playerPos = player.transform.position + Vector3.up * eyeHeight;
             //is the player close enough to be seen?
-            if (Vector3.Distance(transform.position, player.transform.position) < sightDistance)
+            if (Vector3.Distance(npcPos, playerPos) < sightDistance)
             {
-                Vector3 targetDirection = player.transform.position - transform.position - (Vector3.up * eyeHeight);
+                Vector3 targetDirection = playerPos - npcPos;
                 float angleToPlayer = Vector3.Angle(targetDirection, transform.forward);
                 if (angleToPlayer <= fieldOfView * 0.5f)
                 {
                     Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
                     RaycastHit hitInfo = new RaycastHit();
-                    Debug.DrawRay(ray.origin, ray.direction * sightDistance);
                     if (Physics.Raycast(ray, out hitInfo, sightDistance))
                     {
-                        if (hitInfo.transform.tag == "Player")
-                        {
+
+                        
                             Debug.DrawRay(ray.origin, ray.direction * sightDistance);
-                            
-                        }
+                            return hitInfo.transform.CompareTag("Player");
                     }
-                    return true;
+                    else return false; 
                 }
             }
         }

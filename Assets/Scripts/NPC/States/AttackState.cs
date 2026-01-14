@@ -23,6 +23,7 @@ public class AttackState : BaseState
             
             npc.isPlayerAimingatMe = false;
             npc.isPlayerShootingatMe = false;
+            npc.LastKnownPos = npc.Player.transform.position;
         }
         
         if (npc.CanSeePlayer())

@@ -7,6 +7,7 @@ public class GraphicsUI : MonoBehaviour
 {
     public Image damageFilter;
     public Image scannerFilter;
+    [SerializeField] private Image BlackScreen;
 
     private Coroutine fadeCoroutine = null;
     public float fadeSpeed = 0.5f;
@@ -27,6 +28,15 @@ public class GraphicsUI : MonoBehaviour
 
     public void CriticalHealth() {
         damageFilter.color = new Color(1, 1, 1, 0.6f);
+    }
+
+    public void ClearTitleScreen()
+    {
+        BlackScreen.enabled = false;
+    }
+
+    public void ShowBlackScreen() {
+        BlackScreen.enabled = true;
     }
 
     public void ResetGraphicsUI()

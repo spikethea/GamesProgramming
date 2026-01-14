@@ -9,11 +9,12 @@ public class Gun : MonoBehaviour
     [Header("Bullets")]
     public BulletMagazine bulletMagazine;
     public float bulletSpeed = 20f;
-    public float gunshotSoundRadius = 20f;
+    public float gunshotSoundRadius = 30f;
     public Transform firePoint;
 
     [Header("Input")]
     private InputManager inputManager;
+    private PlayerMotor motor;
     public PlayerInput.OnFootActions OnFoot;
     
     public MeshRenderer MeshRenderer;
@@ -35,8 +36,11 @@ public class Gun : MonoBehaviour
         ReloadTimer = 0;
 
         inputManager = Player.GetComponent<InputManager>();
+        motor = Player.GetComponent<PlayerMotor>();
 
         OnFoot = inputManager.onFoot;
+
+        OnFoot.Shoot.performed += ctx => Fire();
     }
 
     //public CinemachineImpulseSource Impulse;
@@ -59,16 +63,11 @@ public class Gun : MonoBehaviour
         ReloadTimer -= Time.deltaTime;
         if (ReloadTimer > 0)
             return;
-
-        if (OnFoot.Shoot.IsPressed())
-        {
-            Fire();
-            AlertNearbyNPCs();
-        }
     }
 
     void Fire()
     {
+        if (motor.ScannerIsEquipped) return;
         GameObject bullet = bulletMagazine.GetBullet();
         if (bullet == null) return;
 
@@ -77,6 +76,9 @@ public class Gun : MonoBehaviour
 
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         rb.linearVelocity = firePoint.forward * bulletSpeed;
+
+        Source.PlayOneShot(ShootingClip);
+        AlertNearbyNPCs();
     }
 
     void AlertNearbyNPCs()
