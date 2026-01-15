@@ -11,7 +11,7 @@ public class NPC : MonoBehaviour
     private Vector3 lastKnownPos;
     public NavMeshAgent Agent { get => agent; }
     public GameObject Player { get => player; }
-
+    public GameManager Game;
     [Header("Health")]
     public int health = 10;
 
@@ -23,7 +23,11 @@ public class NPC : MonoBehaviour
     [Header("Sight Values")]
     public float sightDistance = 20f;
     public float fieldOfView = 85;
-    public float eyeHeight = 2f;
+    public float eyeHeight = 1f;
+    public int waitBeforeSearchTime = 3;
+    public float attackRange = 18f;
+
+
     [Header("Weapon Values")]
     public Transform meleeWeapon;
     public Transform gunBarrel;
@@ -35,6 +39,7 @@ public class NPC : MonoBehaviour
 
     [Header("Animation")]
     public AudioSource audioSource;
+    public AudioClip gunShotSound;
 
     [SerializeField]
     private string currentState;
@@ -105,6 +110,7 @@ public class NPC : MonoBehaviour
         stateMachine = GetComponent<StateMachine>();
         agent = GetComponent<NavMeshAgent>();
         stateMachine.Initialise();
+        Game = FindAnyObjectByType<GameManager>();
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
@@ -148,10 +154,19 @@ public class NPC : MonoBehaviour
     public void Kill() {
         Debug.Log("Killing NPC FIRED");
         Debug.Log(this);
+        
+
 
         if (convict != null)
-            Player.GetComponent<PlayerMotor>().EarnCredits(convict.reward);
+        {
+            GameObject id = Instantiate(Resources.Load("Prefabs/ConvictID") as GameObject, this.transform.position + Vector3.up, Quaternion.identity);
+            id.GetComponent<ConvictID>().convictName = convict.name;
+                id.GetComponent<ConvictID>().creditsAmount = convict.reward;
+        }
+
+        
         Destroy(this.gameObject);
+
     }
 
     public void PoseHandsDown()

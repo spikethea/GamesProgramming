@@ -819,7 +819,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1363
+  m_VersionIndex: 1390
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1482,7 +1482,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4675
+  m_VersionIndex: 4702
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2171,7 +2171,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 360
+  m_VersionIndex: 387
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -3740,7 +3740,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1164
+  m_VersionIndex: 1191
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -3994,7 +3994,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1363
+  m_VersionIndex: 1390
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4162,17 +4162,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC
   agent: {fileID: 3287224402646398466}
+  Game: {fileID: 0}
   health: 8
   path: {fileID: 7027953091426431594}
   debugSphere: {fileID: 0}
   sightDistance: 20
-  fieldOfView: 80
+  fieldOfView: 180
   eyeHeight: 1
+  waitBeforeSearchTime: 3
+  attackRange: 18
   meleeWeapon: {fileID: 0}
   gunBarrel: {fileID: 1075591648885369844}
-  fireRate: 0.1
+  fireRate: 0.26
   animator: {fileID: 9223044339988051949}
   audioSource: {fileID: 2836418896071824732}
+  gunShotSound: {fileID: 8300000, guid: 04e4230bf1b852d4e85ca5c09490b3a4, type: 3}
   currentState: 
   isPlayerAimingatMe: 0
   isPlayerShootingatMe: 0

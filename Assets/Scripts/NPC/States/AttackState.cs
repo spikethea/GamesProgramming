@@ -1,114 +1,177 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AttackState : BaseState
 {
-    private float moveTimer;
+    // Timers
     private float losePlayerTimer;
-    public int waitBeforeSearchTime = 8;
     private float shotTimer;
+    private float reloadTimer;
 
-    private float trackedRotation = 62;
-    private int rotationDir = 1;
-    // Start is called before the first frame update
+    // Reloading
+    private int bulletCount = 0;
+    private int maxBullets = 6;
+    private float reloadTime = 3f;
+
+    // Strafing
+    private float strafeSpeed = 6f;
+    private float strafeDirection = 1f; // 1 = right, -1 = left
+    private float strafeChangeInterval = 1.5f;
+    private float strafeTimer = 0f;
+
+    private bool IsMelee => npc.meleeWeapon != null;
+
     public override void Enter()
     {
+        npc.Agent.isStopped = false;
+        npc.Agent.stoppingDistance = npc.attackRange;
         npc.AnimHandsMoveToShoot();
+
+        shotTimer = npc.fireRate; // allow immediate first shot
+        losePlayerTimer = 0f;
+        reloadTimer = reloadTime;
+        strafeTimer = 0f;
+        strafeDirection = 1f;
     }
 
-    // Update is called once per frame
     public override void Perform()
     {
-        if (npc.isPlayerAimingatMe || npc.isPlayerShootingatMe)
-        {
-            
-            npc.isPlayerAimingatMe = false;
-            npc.isPlayerShootingatMe = false;
-            npc.LastKnownPos = npc.Player.transform.position;
-        }
-        
         if (npc.CanSeePlayer())
         {
-            // lock the lose player timer and increment the move
-            losePlayerTimer = 0;
-            moveTimer += Time.deltaTime;
-            shotTimer += Time.deltaTime;
-            npc.transform.LookAt(npc.Player.transform);
-            if (shotTimer > npc.fireRate && npc.gunBarrel != null)
-            {
-                Shoot();
-            }
+            losePlayerTimer = 0f;
 
-            if (npc.meleeWeapon != null)
-             {
-                Melee();
-            }
-
-
-            if (moveTimer > UnityEngine.Random.Range(3, 7))
-            {
-                npc.Agent.SetDestination(npc.transform.position + (UnityEngine.Random.insideUnitSphere * 5));
-                moveTimer = 0;
-            }
-            npc.LastKnownPos = npc.Player.transform.position;
+            ChaseFaceAndStrafe();
+            HandleAttack();
         }
-        else 
+        else
         {
-            losePlayerTimer += Time.deltaTime;
-
-            if (losePlayerTimer > waitBeforeSearchTime)
-            {
-                npc.isPlayerShootingatMe = false;
-                npc.isPlayerAimingatMe = false;
-                //Change to the search state.
-                stateMachine.ChangeState(new SearchState());
-            }
+            HandleLosePlayer();
         }
     }
-
-    public void Shoot()
-    {
-        if (shotTimer < 3)
-            return;
-        //store reference to the gun barrel.
-        Transform gunbarrel = npc.gunBarrel;
-        // instantiate a new bullet.
-        GameObject bullet = GameObject.Instantiate(Resources.Load("Prefabs/Bullet") as GameObject, gunbarrel.position, npc.transform.rotation);
-        // add force rigidbody of the bullet.
-        bullet.GetComponent<Rigidbody>().linearVelocity = gunbarrel.forward * 40f;
-        shotTimer = 0;
-    }
-
-    public void Melee()
-    {
-        //store reference to the Melee Item.
-        Transform weapon = npc.meleeWeapon;
-        if (trackedRotation > 60)
-        {
-            rotationDir = -1;
-        }
-        if (trackedRotation < 00)
-        {
-            rotationDir = 1;
-        }
-
-        trackedRotation += rotationDir * 1;
-
-        weapon.rotation = Quaternion.Euler(0, 0, trackedRotation);
-    }
-
-    // Collision moved to Hammer.cs
-        // Unity function, on collision with other object
-        //private void OnCollisionEnter(Collision collision)
-        //{
-        //    Transform hitTransform = collision.transform;
-        //    if (hitTransform.CompareTag("Player") && npc.gunBarrel == null)
-        //    {
-        //        Debug.Log("Hit Player");
-        //        hitTransform.GetComponent<PlayerHealth>().TakeDamage(10);
-        //    }
-
-        //}
 
     public override void Exit()
-    { }
+    {
+        npc.Agent.isStopped = false;
+    }
+
+    // ------------------------
+    // Movement & Strafing
+    // ------------------------
+    private void ChaseFaceAndStrafe()
+    {
+        Vector3 toPlayer = npc.transform.position - npc.Player.transform.position;
+        toPlayer.y = 0;
+        float distance = toPlayer.magnitude;
+
+        // Outside attack range → walk toward player
+        if (distance > npc.attackRange)
+        {
+            npc.Agent.isStopped = false;
+            npc.Agent.SetDestination(npc.Player.transform.position);
+        }
+        else
+        {
+            // Inside attack range → stop and strafe
+            npc.Agent.isStopped = true;
+
+            // Strafe timer
+            strafeTimer += Time.deltaTime;
+            if (strafeTimer >= strafeChangeInterval)
+            {
+                strafeDirection *= -1; // switch strafe direction
+                strafeTimer = 0f;
+            }
+
+            // Compute strafing direction perpendicular to player
+            Vector3 strafe = Vector3.Cross(Vector3.up, toPlayer).normalized * strafeDirection;
+
+            // Apply strafing movement
+            npc.transform.position += strafe * strafeSpeed * Time.deltaTime;
+
+            // Always face player
+            Vector3 lookDir = npc.Player.transform.position - npc.transform.position;
+            lookDir.y = 0;
+            if (lookDir.sqrMagnitude > 0.01f)
+                npc.transform.rotation = Quaternion.LookRotation(lookDir);
+        }
+
+        npc.LastKnownPos = npc.Player.transform.position;
+    }
+
+    // ------------------------
+    // Attacking
+    // ------------------------
+    private void HandleAttack()
+    {
+        if (IsMelee)
+        {
+            Melee();
+        }
+        else
+        {
+            if (Reloading())
+            {
+                Debug.Log("Reloading...");
+                return;
+            }
+
+            Shoot();
+        }
+    }
+
+    private bool Reloading()
+    {
+        if (bulletCount < maxBullets)
+            return false; // still have ammo → no reload
+
+        reloadTimer += Time.deltaTime;
+
+        if (reloadTimer >= reloadTime)
+        {
+            bulletCount = 0;
+            reloadTimer = 0f;
+            return false; // reload finished
+        }
+
+        return true; // still reloading
+    }
+
+    private void Shoot()
+    {
+        shotTimer += Time.deltaTime;
+
+        if (shotTimer < npc.fireRate || npc.gunBarrel == null)
+            return;
+
+        Transform gunbarrel = npc.gunBarrel;
+
+        GameObject bullet = GameObject.Instantiate(
+            Resources.Load("Prefabs/Bullet") as GameObject,
+            gunbarrel.position,
+            gunbarrel.rotation
+        );
+
+        bullet.GetComponent<Rigidbody>().linearVelocity = gunbarrel.forward * 40f;
+
+        npc.audioSource.PlayOneShot(npc.gunShotSound);
+        shotTimer = 0f;
+        bulletCount++;
+    }
+
+    private void Melee()
+    {
+        // Trigger melee animation
+    }
+
+    // ------------------------
+    // Losing Player
+    // ------------------------
+    private void HandleLosePlayer()
+    {
+        losePlayerTimer += Time.deltaTime;
+
+        if (losePlayerTimer >= npc.waitBeforeSearchTime)
+        {
+            stateMachine.ChangeState(new SearchState());
+        }
+    }
 }

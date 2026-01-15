@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 
-internal class GuardDefaultState : BaseState
+internal class GuardDefaultState : PatrolState
 {
     private AudioClip audioClip;
 
@@ -17,6 +18,9 @@ internal class GuardDefaultState : BaseState
     // Update is called once per frame
     public override void Perform()
     {
+        if (npc.path != null) {
+            PatrolCycle();
+        }
         if (npc.isPlayerShootingatMe)
         {
             stateMachine.ChangeState(new AttackState());

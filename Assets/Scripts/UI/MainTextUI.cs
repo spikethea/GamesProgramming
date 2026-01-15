@@ -6,6 +6,7 @@ public class MainTextUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI CentreText;
     [SerializeField] private TextMeshProUGUI PromptText;
     [SerializeField] private TextMeshProUGUI BountyText;
+    [SerializeField] private TextMeshProUGUI ReloadingText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -27,9 +28,24 @@ public class MainTextUI : MonoBehaviour
         CentreText.text = prompt;
     }
 
+    public void PulseMainText(string prompt)
+    {
+        CentreText.text = prompt;
+        Invoke(nameof(ClearCentreText), 3f);
+    }
+
     public void ClearTitleScreen() {
         CentreText.color = Color.white;
         CentreText.text = "";
+    }
+
+    public void ShowReloading() {
+        ReloadingText.text = "Reloading \n $% &*(";
+    }
+
+    public void HideReloading()
+    {
+        ReloadingText.text = "";
     }
 
 

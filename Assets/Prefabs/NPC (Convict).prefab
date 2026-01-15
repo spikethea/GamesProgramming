@@ -252,17 +252,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC
   agent: {fileID: 171660067801836163}
+  Game: {fileID: 0}
   health: 20
   path: {fileID: 0}
   debugSphere: {fileID: 542648358998520025}
   sightDistance: 20
-  fieldOfView: 85
-  eyeHeight: 2
+  fieldOfView: 180
+  eyeHeight: 1
+  waitBeforeSearchTime: 3
+  attackRange: 5
   meleeWeapon: {fileID: 0}
   gunBarrel: {fileID: 6373415178864459316}
-  fireRate: 0.1
+  fireRate: 0.35
   animator: {fileID: 899845964865279189}
   audioSource: {fileID: 5904127975883140205}
+  gunShotSound: {fileID: 8300000, guid: 04e4230bf1b852d4e85ca5c09490b3a4, type: 3}
   currentState: 
   isPlayerAimingatMe: 0
   isPlayerShootingatMe: 0

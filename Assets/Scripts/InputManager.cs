@@ -46,7 +46,7 @@ public class InputManager : MonoBehaviour
 
         if (playerInput.OnFoot.enabled)
         {
-            motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
+            motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>(), onFoot.Run.IsPressed());
             motor.switchWeapons(onFoot.Scroll.ReadValue<Vector2>());
         } else {
             //spaceshipManager.motor.ProcessMove(Flying.Movement.ReadValue<Vector2>(), Flying.Boost.IsPressed());

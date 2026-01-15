@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class SpaceshipManager : MonoBehaviour
 {
+    [SerializeField] private GameManager game;
     [SerializeField] private UIManager UI;
     public SpaceshipMotor motor;
    
@@ -19,7 +20,7 @@ public class SpaceshipManager : MonoBehaviour
 
     public bool inSpaceship = false;
     public bool isEngineOn = false;
-    public float checkDistance = 500.0f;
+    public float checkDistance = 5.0f;
 
     [Header("Audio")]
     public AudioSource EngineAudioSource;
@@ -89,6 +90,10 @@ public class SpaceshipManager : MonoBehaviour
 
     public void EnterSpaceship()
     {
+        if (game.currentTarget == null) {
+            UI.mainUI.PulseMainText("Assign a target first");
+            return;
+        }
         inSpaceship = true;
 
         playerMotor.transform.position = sittingPoint.position;
@@ -126,6 +131,7 @@ public class SpaceshipManager : MonoBehaviour
         playerInteract.enabled = true;
 
         playerMotor.transform.position = exitPoint.position;
+        playerMotor.transform.parent = null;
     }
 
     private void MoveSpaceship()

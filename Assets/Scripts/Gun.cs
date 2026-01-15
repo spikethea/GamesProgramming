@@ -1,16 +1,27 @@
-//using Cinemachine;
+﻿//using Cinemachine;
 
 using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    [SerializeField] private UIManager UI;
     public GameObject Player;
     [Header("Bullets")]
     public BulletMagazine bulletMagazine;
     public float bulletSpeed = 20f;
     public float gunshotSoundRadius = 30f;
     public Transform firePoint;
+
+    [Header("Reloading")]
+    // Timers
+    private float reloadTimer;
+
+    // Reloading
+    private int bulletCount = 0;
+    private int maxBullets = 3;
+    private float reloadTime = 3f;
+    private bool canFire = true;
 
     [Header("Input")]
     private InputManager inputManager;
@@ -58,15 +69,40 @@ public class Gun : MonoBehaviour
 
     private void Update()
     {
-        if (!MeshRenderer.enabled)
+        if (Reloading())
+        {
+            UI.mainUI.ShowReloading();
+            canFire = false;
             return;
-        ReloadTimer -= Time.deltaTime;
-        if (ReloadTimer > 0)
-            return;
+        }
+        else
+        {
+            UI.mainUI.HideReloading();
+            canFire = true;
+        }
+    }
+
+    private bool Reloading()
+    {
+        if (bulletCount < maxBullets)
+            return false; // still have ammo → no reload
+
+        reloadTimer += Time.deltaTime;
+
+        if (reloadTimer >= reloadTime)
+        {
+            bulletCount = 0;
+            reloadTimer = 0f;
+            return false; // reload finished
+        }
+
+        return true; // still reloading
     }
 
     void Fire()
     {
+        if (!canFire) return;
+
         if (motor.ScannerIsEquipped) return;
         GameObject bullet = bulletMagazine.GetBullet();
         if (bullet == null) return;
@@ -79,6 +115,7 @@ public class Gun : MonoBehaviour
 
         Source.PlayOneShot(ShootingClip);
         AlertNearbyNPCs();
+        bulletCount++;
     }
 
     void AlertNearbyNPCs()

@@ -7,11 +7,14 @@ public class GameManager : MonoBehaviour
     public UIManager UI;
 
     // Game Objectives
-    public Convict currentTarget;
+    public string currentTarget = null;
 
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         if (Instance == null)
         {
             Instance = this;

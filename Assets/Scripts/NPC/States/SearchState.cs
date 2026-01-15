@@ -8,7 +8,12 @@ public class SearchState : BaseState
     private float moveTimer;
     public override void Enter()
     {
+        npc.Agent.isStopped = false;
+        npc.Agent.stoppingDistance = 0f;
         npc.Agent.SetDestination(npc.LastKnownPos);
+
+        searchTimer = 0f;
+        moveTimer = 0f;
     }
 
     public override void Perform()
@@ -20,18 +25,18 @@ public class SearchState : BaseState
         
         Debug.Log(stateMachine.name);
 
-        if (npc.Agent.remainingDistance < npc.Agent.stoppingDistance)
+        if (!npc.Agent.pathPending && npc.Agent.remainingDistance <= 0.2f)
         {
             searchTimer += Time.deltaTime;
             moveTimer += Time.deltaTime;
 
             if (moveTimer > Random.Range(3, 5))
             {
-                npc.Agent.SetDestination(npc.transform.position + (Random.insideUnitSphere * 10));
+                MoveToRandomNearbyPoint(10f);
                 moveTimer = 0;
             }
             
-            if (searchTimer > 10)
+            if (searchTimer > 10f)
             {
                 
                 if (npc.GetComponent<BanditStateMachine>() != null) {
@@ -47,6 +52,22 @@ public class SearchState : BaseState
                 
             }
             
+        }
+    }
+
+    private void MoveToRandomNearbyPoint(float radius)
+    {
+
+        Vector3 randomDir = Random.insideUnitSphere * radius;
+        randomDir += npc.transform.position;
+
+        if (UnityEngine.AI.NavMesh.SamplePosition(
+            randomDir,
+            out UnityEngine.AI.NavMeshHit hit,
+            radius,
+            UnityEngine.AI.NavMesh.AllAreas))
+        {
+            npc.Agent.SetDestination(hit.position);
         }
     }
 

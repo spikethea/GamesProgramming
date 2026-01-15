@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMotor : MonoBehaviour
 {
+    public GameManager Game;
     [SerializeField] private UIManager UI;
     private CharacterController controller;
     private Vector3 playerVelocity;
@@ -25,6 +26,7 @@ public class PlayerMotor : MonoBehaviour
     public Scanner scanner;
 
     public float speed = 5f;
+    public float runningSpeed = 12f;
     public float gravity = -8.9f;
     public float jumpHeight = 1.5f;
     public float crouchHeight = 0.8f;
@@ -100,12 +102,19 @@ public class PlayerMotor : MonoBehaviour
     }
 
 
-    public void ProcessMove(Vector2 input)
+    public void ProcessMove(Vector2 input, bool isRunning)
     {
         Vector3 moveDirection = Vector3.zero;
         moveDirection.x = input.x;
         moveDirection.z = input.y;
-        controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
+        if (isRunning)
+        {
+            controller.Move(transform.TransformDirection(moveDirection) * runningSpeed * Time.deltaTime);
+        }
+        else {
+            controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
+        }
+
         playerVelocity.y += gravity * Time.deltaTime;
         if (isGrounded && playerVelocity.y < 0)
             playerVelocity.y = -2f;
