@@ -25,6 +25,7 @@ public class InputManager : MonoBehaviour
 
         onFoot.Jump.performed += ctx => motor.Jump();
         onFoot.HotSwap.performed += ctx => motor.switchWeaponsHotkey();
+        onFoot.Melee.performed += ctx => motor.tryAttack();
     }
 
     void Update()

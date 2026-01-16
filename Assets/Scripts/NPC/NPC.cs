@@ -34,6 +34,9 @@ public class NPC : MonoBehaviour
     [Range(0.1f, 10f)]
     public float fireRate;
 
+    [Header("Shield")]
+    public Renderer shieldRenderer;
+
     [Header("Animation")]
     public Animator animator;
 
@@ -79,6 +82,19 @@ public class NPC : MonoBehaviour
         HideFloatingText();
         _floatingTextInstance.transform.parent = transform;
         _cam = Camera.main;
+
+        if (!shieldRenderer) return;
+        shieldTransparent();
+    }
+
+    void shieldOpaque()
+    {
+        shieldRenderer.enabled = true;
+    }
+
+    void shieldTransparent()
+    {
+        shieldRenderer.enabled = false;
     }
 
     public void OnSoundHeard() {
@@ -132,6 +148,10 @@ public class NPC : MonoBehaviour
         {
             AnimDeath();
         }
+
+        if (!shieldRenderer) return;
+        shieldOpaque();
+        Invoke(nameof(shieldTransparent), 0.2f);
     }
 
     public void AnimPanic()
@@ -140,8 +160,6 @@ public class NPC : MonoBehaviour
         Debug.Log("AnimPanic EVENT FIRED");
         Debug.Log(this);
     }
-
-    
 
     public void AnimDeath()
     {

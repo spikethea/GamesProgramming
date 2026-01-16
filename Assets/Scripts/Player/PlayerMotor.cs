@@ -12,7 +12,9 @@ public class PlayerMotor : MonoBehaviour
     private bool hasGameStarted = false;
     private bool isGrounded;
     private bool isCrouched;
-    
+
+    //Animation
+    public Animator animator;
 
     // Player Stats
     [Header("Player Stats")]
@@ -24,6 +26,12 @@ public class PlayerMotor : MonoBehaviour
     public bool ScannerIsEquipped = false;
     public Gun gun;
     public Scanner scanner;
+
+    //Melee
+    public Collider meleeCollider;
+    private float attackCooldown = 5f;
+    private bool meleeReady = true;
+
 
     public float speed = 5f;
     public float runningSpeed = 12f;
@@ -83,6 +91,35 @@ public class PlayerMotor : MonoBehaviour
         if (currentHealth < 0) {
             Death();
         }
+    }
+
+    public void tryAttack()
+    {
+        if (!meleeReady) return;
+
+
+        StartCoroutine(AttackCooldown());
+        meleeAttack();
+    }
+
+    private void meleeAttack() {
+        animator.SetTrigger("Attack");
+        meleeCollider.enabled = true;
+    }
+
+    IEnumerator AttackCooldown()
+    {
+        meleeReady = false;
+
+        yield return new WaitForSeconds(attackCooldown);
+
+        meleeReady = true;
+    }
+
+
+    //Animation event at end of animation
+    public void meleeDisappear() {
+        meleeCollider.enabled = false;
     }
 
     public void Death() {

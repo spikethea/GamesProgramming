@@ -14,10 +14,15 @@ public class IdentificationMachine: MonoBehaviour {
 
     private int reward;
     private bool hasIDBeenCollected = false;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private Renderer renderer;
+    public Material ScreenGreen;
+    public Material ScreenOrange;
 
     private void Start()
     {
+        renderer = transform.GetComponent<Renderer>();
+        renderer.material = ScreenOrange;
+
         scannable = transform.GetComponent<Scannable>();
         Game = FindAnyObjectByType<GameManager>();
         reward = target.reward;
@@ -30,7 +35,7 @@ public class IdentificationMachine: MonoBehaviour {
             Game.currentTarget = "";
             scannable.HideFloatingText();
             scannable.promptMessage = "Bounty Complete";
-
+            renderer.enabled = false;
             BaseTower.CaptionText = "Acquire Target";
             return;
         }
@@ -59,13 +64,14 @@ public class IdentificationMachine: MonoBehaviour {
     void Update()
     {
         if (hasIDBeenCollected) return;
-        if (target == null && Game.currentTarget != target.name) {
+        if (target == null && Game.currentTarget == target.name) {
             Headquarters.HideFloatingText();
             BaseTower.CaptionText = "Collect Reward";
             BaseTower.ShowFloatingText();
 
             scannable.promptMessage = "Collect Reward [E]";
             scannable.Caption = "Collect Reward [E]";
+            renderer.material = ScreenGreen;
 
             hasIDBeenCollected = true;
         }
