@@ -90,7 +90,7 @@ public class SpaceshipManager : MonoBehaviour
 
     public void EnterSpaceship()
     {
-        if (game.currentTarget == null) {
+        if (game.currentTarget == "") {
             UI.mainUI.PulseMainText("Assign a target first");
             return;
         }

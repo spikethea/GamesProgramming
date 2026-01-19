@@ -30670,6 +30670,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1747460477}
+    - target: {fileID: 4517346321227353136, guid: 1d734765841695b46bea629f8abcbe40, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4571906302553122706, guid: 1d734765841695b46bea629f8abcbe40, type: 3}
       propertyPath: path
       value: 
@@ -42440,6 +42444,7 @@ GameObject:
   - component: {fileID: 1609077306}
   - component: {fileID: 1609077308}
   - component: {fileID: 1609077309}
+  - component: {fileID: 1609077310}
   m_Layer: 2
   m_Name: MeleeCollider
   m_TagString: Untagged
@@ -42479,7 +42484,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1.1080699}
   m_Center: {x: 0, y: 0, z: 0.054035753}
@@ -42552,6 +42557,33 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!54 &1609077310
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609077304}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1610561072
 GameObject:
   m_ObjectHideFlags: 0
@@ -58367,7 +58399,7 @@ MonoBehaviour:
   Game: {fileID: 1930320354}
   UI: {fileID: 2143655682}
   animator: {fileID: 8997996947261163811}
-  currentHealth: 3000
+  currentHealth: 3
   currentCredits: 0
   ScannerIsEquipped: 0
   gun: {fileID: 2135825389}
