@@ -157,20 +157,17 @@ public class NPC : MonoBehaviour
     public void AnimPanic()
     {
         animator.Play("Panic", 0, 0f);
-        Debug.Log("AnimPanic EVENT FIRED");
         Debug.Log(this);
     }
 
     public void AnimDeath()
     {
         animator.Play("Death");
-        Debug.Log("AnimDeath EVENT FIRED");
         Debug.Log(this);
         Invoke(nameof(Kill), 3f);
     }
     
     public void Kill() {
-        Debug.Log("Killing NPC FIRED");
         Debug.Log(this);
         
 
@@ -190,15 +187,12 @@ public class NPC : MonoBehaviour
     public void PoseHandsDown()
     {
         if (health <= 0) return;
-
-        Debug.Log("PoseHandsDown EVENT FIRED");
         Debug.Log(this);
     }
 
     public void AnimHandsUp() {
         //var state = animator.GetCurrentAnimatorStateInfo(0);
         animator.Play("Civilian");
-        Debug.Log("AnimHandsUp EVENT FIRED");
         Debug.Log(this);
     }
 
@@ -207,7 +201,6 @@ public class NPC : MonoBehaviour
         if (health <= 0) return;
         
         animator.Play("Guard");
-        Debug.Log("AnimHandsMoveToShoot EVENT FIRED");
         Debug.Log(this);
     }
 
@@ -216,7 +209,6 @@ public class NPC : MonoBehaviour
         if (health <= 0) return;
 
         animator.Play("Shooting");
-        Debug.Log("PoseShooting EVENT FIRED");
         Debug.Log(this);
     }
 
