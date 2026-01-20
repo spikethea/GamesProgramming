@@ -25,7 +25,7 @@ public class ConvictID : MonoBehaviour
             {
                 if (convictName != player.Game.currentTarget) return;
                 audioSource.PlayOneShot(ding);
-                Debug.Log($"Player collected {creditsAmount} credits from convict ID.");
+                player.UI.mainUI.PulseMainText($"{creditsAmount} credits from convict ID. Collect at HQ Identification machine");
                 creditsAmount = 0;
 
                 Invoke(nameof(Disappear), 1.5f);

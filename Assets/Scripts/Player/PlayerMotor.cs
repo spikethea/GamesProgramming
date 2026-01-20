@@ -6,10 +6,10 @@ using UnityEngine.SceneManagement;
 public class PlayerMotor : MonoBehaviour
 {
     public GameManager Game;
-    [SerializeField] private UIManager UI;
+    [SerializeField] public UIManager UI;
     private CharacterController controller;
     private Vector3 playerVelocity;
-    private bool hasGameStarted = false;
+    public bool hasGameStarted = false;
     private bool isGrounded;
     private bool isCrouched;
 
@@ -26,11 +26,15 @@ public class PlayerMotor : MonoBehaviour
     public bool ScannerIsEquipped = false;
     public Gun gun;
     public Scanner scanner;
+    public MeshRenderer lightsaberGlow;
 
     //Melee
     public Collider meleeCollider;
     private float attackCooldown = 5f;
     private bool meleeReady = true;
+
+    //Spaceship
+    public Transform Spaceship;
 
 
     public float speed = 5f;
@@ -49,6 +53,7 @@ public class PlayerMotor : MonoBehaviour
     {
         UI.mainUI.ClearTitleScreen();
         UI.graphicsUI.ClearTitleScreen();
+        UI.mainUI.PulseMainText("Welcome to Headquarters. Select a bounty to start hunting.");
         hasGameStarted = true;
     }
 
@@ -62,6 +67,8 @@ public class PlayerMotor : MonoBehaviour
         {
             controller.enabled = false;
             transform.position = new Vector3(0, 5, 0);
+            Spaceship.position = new Vector3(0.610000014f, -1.35000002f, -18.3199997f);
+            Spaceship.rotation = Quaternion.identity;
             controller.enabled = true;
         }
     }
@@ -98,7 +105,7 @@ public class PlayerMotor : MonoBehaviour
         if (!meleeReady) return;
 
 
-        StartCoroutine(AttackCooldown());
+        
         meleeAttack();
     }
 
@@ -111,6 +118,29 @@ public class PlayerMotor : MonoBehaviour
     {
         meleeReady = false;
 
+        //lerp from grey to emmission
+        Material mat = lightsaberGlow.material;
+        Color baseColor = mat.color;
+
+        float elapsed = 0f;
+
+        while (elapsed < attackCooldown)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / attackCooldown;
+
+            float brightness = Mathf.Lerp(0.3f, 1, t);
+            mat.color = new Color(
+                baseColor.r * brightness,
+                baseColor.g * brightness,
+                baseColor.b * brightness,
+                baseColor.a
+            );
+
+            yield return null;
+        }
+
+
         yield return new WaitForSeconds(attackCooldown);
 
         meleeReady = true;
@@ -120,6 +150,7 @@ public class PlayerMotor : MonoBehaviour
     //Animation event at end of animation
     public void meleeDisappear() {
         meleeCollider.enabled = false;
+        StartCoroutine(AttackCooldown());
     }
 
     public void Death() {
@@ -180,23 +211,26 @@ public class PlayerMotor : MonoBehaviour
         }
     }
 
-    public void switchWeaponsHotkey() {
+    public void switchWeaponsHotkey(bool isAiming) {
+        if (isAiming) return;
         ScannerIsEquipped = !ScannerIsEquipped;
 
         if (ScannerIsEquipped) {
-            gun.Show();
-            scanner.Hide();
-            UI.playerStat.isWeaponEquipped(true);
-        } else
-        {
             gun.Hide();
             scanner.Show();
             UI.playerStat.isWeaponEquipped(false);
+        } else
+        {
+            gun.Show();
+            scanner.Hide();
+            UI.playerStat.isWeaponEquipped(true);
+            
         }
     }
 
-    public void switchWeapons(Vector2 input)
+    public void switchWeapons(Vector2 input, bool isAiming)
     {
+        if (isAiming) return;
         Debug.Log(input.y);
         if (input.y < 0)
         {

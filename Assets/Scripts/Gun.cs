@@ -1,7 +1,8 @@
 ﻿//using Cinemachine;
 
-using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.InputSystem;
 
 public class Gun : MonoBehaviour
 {
@@ -10,12 +11,13 @@ public class Gun : MonoBehaviour
     [Header("Bullets")]
     public BulletMagazine bulletMagazine;
     public float bulletSpeed = 20f;
-    public float gunshotSoundRadius = 30f;
+    public float gunshotSoundRadius = 15f;
     public Transform firePoint;
 
     [Header("Reloading")]
     // Timers
     private float reloadTimer;
+    public AudioClip reloadSound;
 
     // Reloading
     private int bulletCount = 0;
@@ -51,6 +53,7 @@ public class Gun : MonoBehaviour
 
         OnFoot = inputManager.onFoot;
 
+        
         OnFoot.Shoot.performed += ctx => Fire();
     }
 
@@ -93,6 +96,7 @@ public class Gun : MonoBehaviour
         {
             bulletCount = 0;
             reloadTimer = 0f;
+            Source.PlayOneShot(reloadSound);
             return false; // reload finished
         }
 
@@ -101,6 +105,7 @@ public class Gun : MonoBehaviour
 
     void Fire()
     {
+        if (!motor.hasGameStarted) return;
         if (!canFire) return;
 
         if (motor.ScannerIsEquipped) return;

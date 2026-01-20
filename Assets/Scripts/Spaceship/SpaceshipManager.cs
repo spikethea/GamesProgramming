@@ -91,7 +91,7 @@ public class SpaceshipManager : MonoBehaviour
     public void EnterSpaceship()
     {
         if (game.currentTarget == "") {
-            UI.mainUI.PulseMainText("Assign a target first");
+            UI.mainUI.PulseMainText("Assign a target first back at the Identification Machine");
             return;
         }
         inSpaceship = true;

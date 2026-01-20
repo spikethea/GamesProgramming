@@ -24,7 +24,7 @@ public class InputManager : MonoBehaviour
         look = GetComponent<PlayerLook>();
 
         onFoot.Jump.performed += ctx => motor.Jump();
-        onFoot.HotSwap.performed += ctx => motor.switchWeaponsHotkey();
+        onFoot.HotSwap.performed += ctx => motor.switchWeaponsHotkey(isAiming);
         onFoot.Melee.performed += ctx => motor.tryAttack();
     }
 
@@ -48,7 +48,7 @@ public class InputManager : MonoBehaviour
         if (playerInput.OnFoot.enabled)
         {
             motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>(), onFoot.Run.IsPressed());
-            motor.switchWeapons(onFoot.Scroll.ReadValue<Vector2>());
+            motor.switchWeapons(onFoot.Scroll.ReadValue<Vector2>(), isAiming);
         } else {
             //spaceshipManager.motor.ProcessMove(Flying.Movement.ReadValue<Vector2>(), Flying.Boost.IsPressed());
         }

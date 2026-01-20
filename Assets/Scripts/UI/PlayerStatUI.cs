@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -35,7 +37,23 @@ public class PlayerStatUI : MonoBehaviour
     public void UpdateCredits(int currentCredits)
     {
         CreditsUI.text = $"$ {currentCredits}/900";
+        StartCoroutine(AnimateCreditChange());
     }
+
+    IEnumerator AnimateCreditChange()
+    {
+        var numberOfFlashes = 0;
+        while (numberOfFlashes > 3) {
+            CreditsUI.color = Color.grey;
+            yield return new WaitForSeconds(0.3f);
+            CreditsUI.color = Color.white;
+            yield return new WaitForSeconds(0.3f);
+        }
+
+        yield return null;
+
+    }
+
     public void isWeaponEquipped(bool weaponEquipped)
     {
         if (weaponEquipped) {
